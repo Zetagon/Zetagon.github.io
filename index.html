@@ -1,19 +1,7 @@
 <!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
-  <script>
-      function func(n)
-      {
-		var i = 0;
-		setInterval(test, 1, n);
-		
-        function test(a)
-		{
-			document.getElementById("bild").style.top = a + i + 'px';
-			document.getElementById("bild").innerHTML = a + i + 'px';
-			i++;
-		}
-      }
+  <script src = "script.js">
   </script>
     <style>
         #bild{
@@ -24,7 +12,7 @@
 <html>
 <body>
 <p>
-<button onclick="func(10);">Click Me</button>
+<button onclick="func(10);" >Click Me</button>
 </p> 
 <h1>Hej!</h1>
 <p id = "bild">Det här är min hemsida<br>den är hostad via <a href = https://github.com/><img src = "https://og.github.com/logo/github-logo@1200x1200.png"  alt = "github" height =100 width =100><a></p>
