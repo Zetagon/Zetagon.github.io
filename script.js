@@ -17,10 +17,13 @@ function func(n)
 
 // var wordFiles = {
 	String.prototype.toUnicode = function(){
-    var result = "";
+   	 	var result = "";
     for(var i = 0; i < this.length; i++){
         result += "\\u" + ("000" + this[i].charCodeAt(0).toString(16)).substr(-4);
-    }
+    }		
+    	return result;
+	};
+
 	function encodeHTML(str){
  		var aStr = str.split(''),
      	i = aStr.length,
@@ -35,12 +38,8 @@ function func(n)
    			}
   		}
 		return aRet.reverse().join('');
-	}	
-		
-		
-		
-    return result;
-	};
+	}
+
 	var fileone;
 	var filetwo;
 	// function getFile(name)
