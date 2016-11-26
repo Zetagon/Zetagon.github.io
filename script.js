@@ -28,7 +28,7 @@ function func(n)
 	// function getFile(name)
 	// {
 		$(document).ready(function(){
-			$("p").click(function()
+			$("#bild").click(function()
 			{
 				$.get("English_must_words-1.txt", function(data, status)
 				{
