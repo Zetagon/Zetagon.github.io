@@ -21,6 +21,24 @@ function func(n)
     for(var i = 0; i < this.length; i++){
         result += "\\u" + ("000" + this[i].charCodeAt(0).toString(16)).substr(-4);
     }
+	function encodeHTML(str){
+ 		var aStr = str.split(''),
+     	i = aStr.length,
+     	aRet = [];
+
+   		while (--i) {
+    		var iC = aStr[i].charCodeAt();
+    		if (iC < 65 || iC > 127 || (iC>90 && iC<97)) {
+   			   aRet.push('&#'+iC+';');
+   			} else {
+    			aRet.push(aStr[i]);
+   			}
+  		}
+		return aRet.reverse().join('');
+	}	
+		
+		
+		
     return result;
 	};
 	var fileone;
@@ -33,7 +51,7 @@ function func(n)
 				$.get("English_must_words-1.txt", function(data, status)
 				{
 					// alert("Data: " + data + "\nStatus: " + status);
-					 document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
+					 document.getElementById("bild").innerHTML = "Data: " + encodeHTML(data) + "\nStatus: " + status;
 				},"text")
 			})
 		})
