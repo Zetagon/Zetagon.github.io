@@ -28,12 +28,12 @@ function func(n)
 	// function getFile(name)
 	// {
 		$(document).ready(function(){
-			$("#bild").click(function()
+			$("p").click(function()
 			{
 				$.get("English_must_words-1.txt", function(data, status)
 				{
 					// alert("Data: " + data + "\nStatus: " + status);
-					 document.getElementById("bild").innerHTML = "Data: " + data.toUnicode() + "\nStatus: " + status;
+					 document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
 				},"text")
 			})
 		})
