@@ -11,7 +11,7 @@ function func(n)
 		document.getElementById("bild").style.left = a + i + 'px';
 		document.getElementById("bild").innerHTML = a + i + 'px';
 		i++;
-		$("head").innerHTML = "\u0074"
+		$("h1").innerHTML = "\u0074"
 	}
 }
 
