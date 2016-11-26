@@ -11,7 +11,7 @@ function func(n)
 //		document.getElementById("bild").style.left = a + i + 'px';
 //		document.getElementById("bild").innerHTML = a + i + 'px';
 		i++;
-		document.getElementById("bild").innerHTML = "\u0074"
+		document.getElementById("bild").innerHTML = "f\u00F6rv\u00E4rra(--- something)"
 	}
 }
 
