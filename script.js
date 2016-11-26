@@ -50,8 +50,8 @@ function func(n)
 				$.get("English_must_words-1.txt", function(data, status)
 				{
 					// alert("Data: " + data + "\nStatus: " + status);
-					 document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
-					alert(data)
+					 //document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
+					alert(data);
 				},"text")
 			})
 		})
