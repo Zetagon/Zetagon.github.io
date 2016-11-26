@@ -51,6 +51,7 @@ function func(n)
 				{
 					// alert("Data: " + data + "\nStatus: " + status);
 					 document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
+					alert(data)
 				},"text")
 			})
 		})
