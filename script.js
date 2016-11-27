@@ -17,14 +17,14 @@ function func(n)
 function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
 }
- var wordFiles = {
+ var wordFiles = new function(){
 	 
-	var fileone;
-	var filetwo;
+	var fileone = [];
+	var filetwo = [];
 	var input;
 	var answer;
 	var integer;
-	function encodeHTML(str){
+	var encodeHTML = function(str){
  		var aStr = str.split(''),
      	i = aStr.length,
      	aRet = [];
@@ -39,14 +39,14 @@ function getRandomArbitrary(min, max) {
   		}
 		return aRet.reverse().join('');
 	}
-	function openWordFiles(filename){
+	this.openWordFiles = function(filename){
 		$.get(filename + "-1.txt", function(data, status)
 		{
 			// alert("Data: " + data + "\nStatus: " + status);
 			 //document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
 			fileone = data.split(/\r\n|\r|\n/g)
 			
-			alert(data);
+			alert(fileone);
 		},"text")
 		$.get(filename + "-2.txt", function(data, status)
 		{
@@ -54,19 +54,19 @@ function getRandomArbitrary(min, max) {
 			 //document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
 			filetwo = data.split(/\r\n|\r|\n/g)
 			
-			alert(data);
+			alert(filetwo);
 		},"text")
 	}
 	
-	function SaveInput(){
+	var SaveInput = function(){
 		return $("#input").html();
 	}
-	function newWord(){
+	this.newWord = function(){
 		 integer = getRandomArbitrary(0, fileone.length);
-		 $("#output").html() = fileone[integer];
+		 $("#output").text(fileone[integer]);
 		 answer = filetwo[integer];
-	}
-	function handleInput(){
+	};
+	var handleInput = function(){
 		input = saveInput();
 		if(input == answer){
 			$("#output").html() = "correct!";
@@ -81,15 +81,17 @@ function getRandomArbitrary(min, max) {
 		newWord();
 	}
 
- }
+ };
 
 
 
 $(document).ready(function(){
-	$("#restart").click(function{
-		wordFiles.newWord();
-		$("#restart").html() = "start";
+	$("button").click(function(){
+		
+		$("#restart").text( "start");
 		wordFiles.openWordFiles("English_must_words");
+		wordFiles.newWord();
+		alert("hello")
 	})
 		
 	$("p").click(function()
@@ -101,7 +103,7 @@ $(document).ready(function(){
 	document.addEventListener('keydown', function(event){
 		switch(event.keyCode){
 			case 13:
-				wordFiles.handleInput)();
+				wordFiles.handleInput();
 			break;
 		}
 	})
