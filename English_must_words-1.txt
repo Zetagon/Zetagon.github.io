@@ -1,4 +1,4 @@
-tvinga
+﻿tvinga
 tvinga med hot(He was --- into -ing)
 tvinga med hot(substantiv-form)
 upphöra att gälla
@@ -10,7 +10,7 @@ annoy, make something worse(injury, ---ed his injury)
 förstöra till småbitar
 omintetgöra,destroy something completely
 omintetgöra, to remove all signs of something, either by destroying or hiding
-
+utrota
 försäkra(generellt)
 försäkra(lugna någon)
 försäkra(pengar till bil, hus, etc)
@@ -21,7 +21,7 @@ measure, judge(--- public opinion)
 smitta(more specific)
 förorena
 strida mot(avtal)
-
+to break against something, especially a law/agreement etc.
 innebära,antyda
 innebära, medföra, innefatta
 innebära
@@ -43,7 +43,7 @@ skrämmande, förförlig, hemsk
 ohygglig, avskyvärd
 perfect, perfectly clean
 perfect (--- taste/manners/credentials/record)
-perfect
+perfect,felfri
 partisk
 opartisk
 surprised
@@ -54,7 +54,7 @@ anger & frustration
 angry
 angry
 eländig, ynklig
-
+föraktlig, usel
 being extremly unhappy, in --- poverty, he offered an --- apology, an --- coward
 oumbärlig
 never having happened or existed in the past
