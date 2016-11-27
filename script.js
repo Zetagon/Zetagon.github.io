@@ -93,10 +93,6 @@ $(document).ready(function(){
 		wordFiles.newWord();
 	})
 		
-	$("p").click(function()
-	{
-		wordFiles.openWordFiles("English_must_words");
-	})
 	
 	//add event handling, check if user presses \n save input
 	document.addEventListener('keydown', function(event){
