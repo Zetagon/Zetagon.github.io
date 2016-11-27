@@ -76,7 +76,7 @@ function getRandomArbitrary(min, max) {
 			
 		}
 		else{
-			$("#error").text( "Incorrect! The correct answer was: " + answer + ", you typed: " + input);
+			$("#error").text( "Incorrect! The correct answer was:" + answer + ", you typed: " + input);
 		}
 		this.newWord();
 	}
