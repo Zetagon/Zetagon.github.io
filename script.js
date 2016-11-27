@@ -90,9 +90,10 @@ $(document).ready(function(){
 		
 		$("#restart").text( "start");
 		wordFiles.openWordFiles("English_must_words");
-		wordFiles.newWord();
-		wordFiles.openWordFiles("English_must_words");
-		wordFiles.newWord();
+		setTimeout(function(){
+			wordFiles.newWord();
+		}, 300)
+		
 	})
 		
 	
