@@ -15,7 +15,7 @@ function func(n)
 	}
 }
 function getRandomArbitrary(min, max) {
-    return Math.random() * (max - min) + min;
+    return Math.floor(Math.random() * (max - min) + min);
 }
  var wordFiles = new function(){
 	 
@@ -46,39 +46,39 @@ function getRandomArbitrary(min, max) {
 			 //document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
 			fileone = data.split(/\r\n|\r|\n/g)
 			
-			alert(fileone);
+			
 		},"text")
 		$.get(filename + "-2.txt", function(data, status)
 		{
 			// alert("Data: " + data + "\nStatus: " + status);
 			 //document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
 			filetwo = data.split(/\r\n|\r|\n/g)
-			
-			alert(filetwo);
+
 		},"text")
 	}
 	
 	var SaveInput = function(){
-		return $("#input").html();
+		input =  document.getElementById("input").value;
+		$("#input").val("")
 	}
 	this.newWord = function(){
 		 integer = getRandomArbitrary(0, fileone.length);
 		 $("#output").text(fileone[integer]);
 		 answer = filetwo[integer];
 	};
-	var handleInput = function(){
-		input = saveInput();
+	this.handleInput = function(){
+		SaveInput();
 		if(input == answer){
-			$("#output").html() = "correct!";
+			$("#error").text( "correct!");
 			var index = filetwo.indexOf(answer);
 			fileone.splice(index, 1);
 			filetwo.splice(index, 1);
 			
 		}
 		else{
-			$("#output").html() = "Incorrect! The correct answer was: " + answer;
+			$("#error").text( "Incorrect! The correct answer was: " + answer + ", you typed: " + input);
 		}
-		newWord();
+		this.newWord();
 	}
 
  };
@@ -91,7 +91,6 @@ $(document).ready(function(){
 		$("#restart").text( "start");
 		wordFiles.openWordFiles("English_must_words");
 		wordFiles.newWord();
-		alert("hello")
 	})
 		
 	$("p").click(function()
