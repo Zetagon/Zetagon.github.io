@@ -91,10 +91,7 @@ $(document).ready(function(){
 		var ary = data.split(/\r\n|\r|\n/g)
 		alert(status)
 		for( element in ary){
-			jQuery('<p/>',{
-				id: element,
-				text: "test"
-			}).appendTo('#menu')
+			jQuery("p class = \"button\" id = \"English_must_words\">" + element + "</p>").appendTo("#menu")
 		}
 	})
 	// $("button").click(function(){
