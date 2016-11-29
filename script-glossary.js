@@ -40,7 +40,7 @@ function getRandomArbitrary(min, max) {
 		return aRet.reverse().join('');
 	}
 	this.openWordFiles = function(filename){
-		var jqXHR = $.get(filename + ".txt").done(function(){
+		var jqXHR = $.get(filename + ".txt").done(function(data){
 			var ary = data.split(/\r\n|\r|\n/g)
 			var temp
 			for(var i = 0; i < ary.size; i++){
