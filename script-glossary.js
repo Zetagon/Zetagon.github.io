@@ -40,21 +40,33 @@ function getRandomArbitrary(min, max) {
 		return aRet.reverse().join('');
 	}
 	this.openWordFiles = function(filename){
-		$.get(filename + "-1.txt", function(data, status)
-		{
-			 alert("Data: " + data + "\nStatus: " + status);
-			 //document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
-			fileone = data.split(/\r\n|\r|\n/g)
-			
-			
-		},"text")
-		$.get(filename + "-2.txt", function(data, status)
-		{
-			// alert("Data: " + data + "\nStatus: " + status);
-			 //document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
-			filetwo = data.split(/\r\n|\r|\n/g)
+		var jqXHR = $.get(filename + ".txt", function(data, status){
+			var ary = data.split(/\r\n|\r|\n/g)
+			var temp
+			for(var i = 0; i < ary.size; i++){
+				temp = ary[i].split(/=/)
+				fileone.push(temp[0])
+				filetwo.push(temp[1])
+			}
+		}, "text")
+		jqXHR.done(function(){
+			$.get(filename + "-1.txt", function(data, status)
+			{
+				 alert("Data: " + data + "\nStatus: " + status);
+				 //document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
+				fileone = data.split(/\r\n|\r|\n/g)
 
-		},"text")
+
+			},"text")
+			$.get(filename + "-2.txt", function(data, status)
+			{
+				// alert("Data: " + data + "\nStatus: " + status);
+				 //document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
+				filetwo = data.split(/\r\n|\r|\n/g)
+
+
+			},"text")
+		})
 	}
 	
 	var SaveInput = function(){
