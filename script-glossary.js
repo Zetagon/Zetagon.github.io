@@ -49,7 +49,7 @@ function getRandomArbitrary(min, max) {
 				filetwo.push(temp[1])
 			}
 		}, "text")
-		jqXHR.error(function(response){
+		jqXHR.fail(function(){
 			$.get(filename + "-1.txt", function(data, status)
 			{
 				 alert("Data: " + data + "\nStatus: " + status);
