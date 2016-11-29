@@ -100,9 +100,9 @@ $(document).ready(function(){
 			wordFiles.openWordFiles(path + identity)
 			setTimeout(function(){
 				wordFiles.newWord()	
-			},100)
+			},50)
 		})
-		},100)
+		},50)
 	})
 	// $("button").click(function(){
 		
