@@ -41,7 +41,6 @@ function getRandomArbitrary(min, max) {
 	}
 	this.openWordFiles = function(filename){
 		var jqXHR = $.get(filename + ".txt").done(function(data){
-			alert("succes")
 			var ary = data.split(/\r\n|\r|\n/g)
 			var temp
 			for(var i = 0; i < ary.length; i++){
@@ -102,7 +101,6 @@ $(document).ready(function(){
 		var ary = data.split(/\r\n|\r|\n/g)
 		for( element in ary){
 			jQuery("<p class = \"button\" id = "+ary[element] + ">" + ary[element] + "</p>").appendTo("#menu")
-			alert(ary[element])
 		}
 		setTimeout(function(){
 		$(".button").click(function(){
