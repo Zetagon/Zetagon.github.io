@@ -90,7 +90,7 @@ $(document).ready(function(){
 	$.get("words/words.filepath", function(data, status){
 		var ary = data.split(/\r\n|\r|\n/g)
 		for( element in ary){
-			jQuery("p class = \"button\" id = \"English_must_words\">" + ary[element] + "</p>").appendTo("#menu")
+			jQuery("<p class = \"button\" id = "+ary[element] + ">" + ary[element] + "</p>").appendTo("#menu")
 			alert(ary[element])
 		}
 	})
