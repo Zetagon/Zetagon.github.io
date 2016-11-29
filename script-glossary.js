@@ -51,7 +51,6 @@ function getRandomArbitrary(min, max) {
 		}, "text").fail(function(){
 			$.get(filename + "-1.txt", function(data, status)
 			{
-				 alert("Data: " + data + "\nStatus: " + status);
 				 //document.getElementById("bild").innerHTML = "Data: " + data + "\nStatus: " + status;
 				fileone = data.split(/\r\n|\r|\n/g)
 
