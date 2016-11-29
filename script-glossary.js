@@ -93,6 +93,16 @@ $(document).ready(function(){
 			jQuery("<p class = \"button\" id = "+ary[element] + ">" + ary[element] + "</p>").appendTo("#menu")
 			alert(ary[element])
 		}
+		setTimeout(function(){
+		$(".button").click(function(){
+			var identity = $(this).attr('id')
+			var path = "words/"
+			wordFiles.openWordFiles(path + identity)
+			setTimeout(function(){
+				wordFiles.newWord()	
+			},300)
+		})
+		},200)
 	})
 	// $("button").click(function(){
 		
@@ -114,14 +124,7 @@ $(document).ready(function(){
 		}
 	})
 	
-	$(".button").click(function(){
-		var identity = $(this).attr('id')
-		var path = "words/"
-		wordFiles.openWordFiles(path + identity)
-		setTimeout(function(){
-			wordFiles.newWord()	
-		},300)
-	})
+	
 	
 	
 	
