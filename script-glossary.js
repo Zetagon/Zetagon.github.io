@@ -91,7 +91,7 @@ $(document).ready(function(){
 		var ary = data.split(/\r\n|\r|\n/g)
 		alert(status)
 		for( element in ary){
-			jQuery('div/',{
+			jQuery('<p/>',{
 				id: element,
 				text: "test"
 			}).appendTo('#menu')
