@@ -44,7 +44,7 @@ function getRandomArbitrary(min, max) {
 			alert("succes")
 			var ary = data.split(/\r\n|\r|\n/g)
 			var temp
-			for(var i = 0; i < ary.size; i++){
+			for(var i = 0; i < ary.length; i++){
 				temp = ary[i].split(/=/)
 				fileone.push(temp[0])
 				filetwo.push(temp[1])
