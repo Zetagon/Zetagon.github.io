@@ -90,8 +90,8 @@ $(document).ready(function(){
 	$.get("words/words.filepath", function(data, status){
 		var ary = data.split(/\r\n|\r|\n/g)
 		for( element in ary){
-			jQuery("p class = \"button\" id = \"English_must_words\">" + element + "</p>").appendTo("#menu")
-			alert(element)
+			jQuery("p class = \"button\" id = \"English_must_words\">" + ary[element] + "</p>").appendTo("#menu")
+			alert(ary[element])
 		}
 	})
 	// $("button").click(function(){
