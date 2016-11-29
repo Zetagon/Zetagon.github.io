@@ -41,6 +41,7 @@ function getRandomArbitrary(min, max) {
 	}
 	this.openWordFiles = function(filename){
 		var jqXHR = $.get(filename + ".txt").done(function(data){
+			alert("succes")
 			var ary = data.split(/\r\n|\r|\n/g)
 			var temp
 			for(var i = 0; i < ary.size; i++){
