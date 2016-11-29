@@ -93,7 +93,7 @@ $(document).ready(function(){
 		for( element in ary){
 			jQuery('div/',{
 				id: element,
-				text: element
+				text: "test"
 			}).appendTo('#menu')
 		}
 	})
