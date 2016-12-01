@@ -100,7 +100,7 @@ $(document).ready(function(){
 	$.get("words/words.filepath", function(data, status){
 		var ary = data.split(/\r\n|\r|\n/g)
 		for( element in ary){
-			jQuery("<p class = \"button\" id = "+ary[element] + ">" + ary[element] + "</p>").appendTo("#menu")
+			jQuery("<button class = \"button\" id = "+ary[element] + ">" + ary[element] + "</button>").appendTo("#menu")
 		}
 		setTimeout(function(){
 		$(".button").click(function(){
