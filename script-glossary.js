@@ -90,6 +90,11 @@ function getRandomArbitrary(min, max) {
 		}
 		this.newWord();
 	}
+	this.swap = function(){
+		var tempfile = fileone
+		fileone = filetwo
+		filetwo = tempfile;
+	};
 
  };
 
@@ -97,7 +102,7 @@ function getRandomArbitrary(min, max) {
 
 $(document).ready(function(){
 	
-	$.get("words/words.filepath", function(data, status){
+	$.get("words/words.txt", function(data, status){
 		var ary = data.split(/\r\n|\r|\n/g)
 		for( element in ary){
 			jQuery("<button class = \"button\" id = "+ary[element] + ">" + ary[element] + "</button><br>").appendTo("#menu")
@@ -113,15 +118,10 @@ $(document).ready(function(){
 		})
 		},50)
 	})
-	// $("button").click(function(){
-		
-		// $("#restart").text( "restart");
-		// wordFiles.openWordFiles("English_must_words");
-		// setTimeout(function(){
-			// wordFiles.newWord();
-		// }, 300)
-		
-	// })
+	$("#reverse").click(function(){
+		wordFiles.swap()
+		wordFiles.newWord()
+	})
 		
 	
 	//add event handling, check if user presses \n save input
