@@ -11,6 +11,10 @@ body
 	font-size: 4vw;
 	text-align: center;
 }
+.reverse_div
+{
+	text-align: center;
+}
 #reverse_button
 {
 	font-size: 2vw;
