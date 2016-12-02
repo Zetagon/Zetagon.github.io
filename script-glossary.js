@@ -83,10 +83,11 @@ function getRandomArbitrary(min, max) {
 			var index = filetwo.indexOf(answer);
 			fileone.splice(index, 1);
 			filetwo.splice(index, 1);
-			
+			$("#response").css("color", "green")
 		}
 		else{
 			$("#response").text( "Incorrect! The correct answer was:" + answer + ", you typed: " + input);
+			$("#response").css("color", "red")
 		}
 		this.newWord();
 	}

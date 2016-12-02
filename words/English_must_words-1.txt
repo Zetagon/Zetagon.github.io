@@ -47,7 +47,7 @@ perfect,felfri
 partisk
 opartisk
 surprised
-surprised
+surprised,shocked by the unexpected
 surprised, bedövad
 förkrossad
 anger & frustration

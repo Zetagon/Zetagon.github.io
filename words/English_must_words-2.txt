@@ -29,7 +29,7 @@ ensue
 perceive
 discern
 discerning
-distinguish
+extinguish
 quench
 outweigh
 offset
