@@ -68,25 +68,25 @@ function getRandomArbitrary(min, max) {
 	}
 	
 	var SaveInput = function(){
-		input =  document.getElementById("input").value;
+		input =  document.getElementById("leosinput").value;
 		$("#input").val("")
 	}
 	this.newWord = function(){
 		 integer = getRandomArbitrary(0, fileone.length);
-		 $("#output").text(fileone[integer]);
+		 $("#phrase").text(fileone[integer]);
 		 answer = filetwo[integer];
 	};
 	this.handleInput = function(){
 		SaveInput();
 		if(input == answer){
-			$("#error").text( "correct!");
+			$("#response").text( "correct!");
 			var index = filetwo.indexOf(answer);
 			fileone.splice(index, 1);
 			filetwo.splice(index, 1);
 			
 		}
 		else{
-			$("#error").text( "Incorrect! The correct answer was:" + answer + ", you typed: " + input);
+			$("#response").text( "Incorrect! The correct answer was:" + answer + ", you typed: " + input);
 		}
 		this.newWord();
 	}
