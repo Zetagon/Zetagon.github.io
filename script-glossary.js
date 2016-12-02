@@ -100,7 +100,7 @@ $(document).ready(function(){
 	$.get("words/words.filepath", function(data, status){
 		var ary = data.split(/\r\n|\r|\n/g)
 		for( element in ary){
-			jQuery("<li class=\"navigation_item\" id = " +ary[element] + ">" + ary[element] + "</li>").appendTo(".navigation_list")
+			jQuery("<li class=\"navigation_item\" class=\"button\" id = " +ary[element] + ">" + ary[element] + "</li>").appendTo(".navigation_list")
 		}
 		setTimeout(function(){
 		$(".button").click(function(){
