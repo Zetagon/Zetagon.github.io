@@ -17,6 +17,7 @@ body
 }
 #reverse_button
 {
+	display:block;
 	width: 5vw;
 	font-size: 2vw;
 	text-align: center;
