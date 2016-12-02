@@ -1,26 +1,37 @@
 <!DOCTYPE html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-16">
-	
-	
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script>if (!window.jQuery) { document.write('<script src="jquery-3.1.1.min.js"><\/script>'); }
-	</script>
-	<script src="script-glossary.js"></script>
-    <style>
-        #menu{
-          position: absolute;
-		  right: 100px
-        }
-    </style>
-</head>
 <html>
-<body>
-<div id = "menu">
-</div>
-<button id= "reverse">&#8596;</button>
-<div id = "error"></div>
-<div id = "output"></div>
-<input type = "text" id = "input"> 
-</body>
+	<head>
+		<title>Glossary</title>
+		<link rel="stylesheet" href="glossary.css"></link>
+		<meta http-equiv="Content-Type" content="text/html" charset="UTF-8"></meta>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script>if (!window.jQuery) { document.write('<script src="jquery-3.1.1.min.js"><\/script>'); }</script>
+		<script src="script-glossary.js"></script>
+	</head>
+	<body>
+		<div class="master_div">
+			<div class="left_menu">
+				<ul class="navigation_list"></ul>
+			</div>
+			<div class="main_content">
+				<div id="phrase">
+					Here we tell you what to type
+				</div>
+				<div>
+					<button id= "reverse_button">&#8596;</button>
+				</div>
+				<div class="wordinput">
+					<input id="leosinput" type="text" name="Word"></input>
+				</div>
+				<div id="response">
+					And here we tell you when you typed it wrong
+				</div>
+				<div class="footer_div">
+					<div id="footer_text">
+						Website hosted by Leo Okawa Ericson
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>

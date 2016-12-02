@@ -68,25 +68,25 @@ function getRandomArbitrary(min, max) {
 	}
 	
 	var SaveInput = function(){
-		input =  document.getElementById("input").value;
-		$("#input").val("")
+		input =  document.getElementById("leosinput").value;
+		$("#leosinput").val("")
 	}
 	this.newWord = function(){
 		 integer = getRandomArbitrary(0, fileone.length);
-		 $("#output").text(fileone[integer]);
+		 $("#phrase").text(fileone[integer]);
 		 answer = filetwo[integer];
 	};
 	this.handleInput = function(){
 		SaveInput();
 		if(input == answer){
-			$("#error").text( "correct!");
+			$("#response").text( "correct!");
 			var index = filetwo.indexOf(answer);
 			fileone.splice(index, 1);
 			filetwo.splice(index, 1);
 			
 		}
 		else{
-			$("#error").text( "Incorrect! The correct answer was:" + answer + ", you typed: " + input);
+			$("#response").text( "Incorrect! The correct answer was:" + answer + ", you typed: " + input);
 		}
 		this.newWord();
 	}
@@ -105,7 +105,7 @@ $(document).ready(function(){
 	$.get("words/words.txt", function(data, status){
 		var ary = data.split(/\r\n|\r|\n/g)
 		for( element in ary){
-			jQuery("<button class = \"button\" id = "+ary[element] + ">" + ary[element] + "</button><br>").appendTo("#menu")
+			jQuery("<li class=\"navigation_item button\"  id = " +ary[element] + ">" + ary[element] + "</li>").appendTo(".navigation_list")
 		}
 		setTimeout(function(){
 		$(".button").click(function(){
