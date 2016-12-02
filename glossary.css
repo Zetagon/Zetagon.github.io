@@ -11,6 +11,20 @@ body
 	font-size: 4vw;
 	text-align: center;
 }
+.reverse_div
+{
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+}
+#reverse_button
+{
+	padding: 0;
+	border: none;
+	width: 7vw;
+	font-size: 2vw;
+	text-align: center;
+}
 #response
 {
 	margin: 1vw;
