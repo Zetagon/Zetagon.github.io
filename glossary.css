@@ -13,11 +13,11 @@ body
 }
 .reverse_div
 {
+	width: 100%;
 	margin: 0 auto;
 }
 #reverse_button
 {
-	display:block;
 	width: 5vw;
 	font-size: 2vw;
 	text-align: center;
