@@ -69,7 +69,7 @@ function getRandomArbitrary(min, max) {
 	
 	var SaveInput = function(){
 		input =  document.getElementById("leosinput").value;
-		$("#input").val("")
+		$("#leosinput").val("")
 	}
 	this.newWord = function(){
 		 integer = getRandomArbitrary(0, fileone.length);
