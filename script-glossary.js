@@ -118,7 +118,7 @@ $(document).ready(function(){
 		})
 		},50)
 	})
-	$("#reverse").click(function(){
+	$("#reverse_button").click(function(){
 		wordFiles.swap()
 		wordFiles.newWord()
 	})
