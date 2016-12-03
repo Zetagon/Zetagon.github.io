@@ -1,0 +1,10 @@
+svar0=ord0
+svar1=ord1
+svar2=ord2
+svar3=ord3
+svar4=ord4
+svar5=ord5
+svar6=ord6
+svar7=ord7
+svar8=ord8
+svar9=ord9
