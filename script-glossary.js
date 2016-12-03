@@ -3,6 +3,18 @@ var reversed = false;
 var output;
 var answer;
 var WordList;
+var WordListIndex;
+var userClearFirstTry = true;
+var userTypos = new function(){
+	// var correct_words = [];
+	 var temp1 = []
+	 var temp2 = []
+	// var user_entered = temp1 + temp2
+	this.correct_words =[]
+	this.user_entered = [[]]
+}
+// userTypos.correct_words = []
+// userTypos.user_entered = [] + []
 
 window.onload = function LoadMenu()
 {
@@ -39,8 +51,6 @@ document.getElementById("leosinput").addEventListener("keydown", function(event)
 	{
 		case 13:
 			HandleInput();
-		break;
-		case 38:
 		break;
 	}
 });
@@ -85,21 +95,45 @@ function getRandomArbitrary(min, max)
 }
 function NewWord()
 {
-	var integer = getRandomArbitrary(0, (WordList[0].length -1));
-	
-	if(reversed)
+	function printScore()
 	{
-		var left = 0;
-		var right = 1;
+		var table = document.getElementById("table_of_wrongs")
+		var outputstring;
+		for(var i = 0; i < userTypos.correct_words.lengt; i++)
+		{
+			var temp = "<tr><td>" +
+				userTypos.correct_words[i] + 
+				"</td><td>" +
+				userTypos.user_entered +
+				"</td>";
+			outputstring += temp;
+		}
+		table.innerHTML = outputstring;
+	}
+	
+	if(WordList[0].length === 0)
+	{
+		printScore()
 	}
 	else
 	{
-		var left = 1;
-		var right = 0;
+		WordListIndex = getRandomArbitrary(0, (WordList[0].length -1));
+		userClearFirstTry = true
+		if(reversed)
+		{
+			var left = 0;
+			var right = 1;
+		}
+		else
+		{
+			var left = 1;
+			var right = 0;
+		}
+		output = WordList[left][WordListIndex];
+		answer = WordList[right][WordListIndex];
+		document.getElementById("phrase").innerHTML = output;
+
 	}
-	output = WordList[left][integer];
-	answer = WordList[right][integer];
-	document.getElementById("phrase").innerHTML = output;
 }
 function SaveAndClearInput()
 {
@@ -112,10 +146,19 @@ function HandleInput()
 	if (input == answer)
 	{
 		document.getElementById("response").innerHTML = "<span style = 'color: blue;'>Correct!</span>"
+		if(userClearFirstTry)
+		{
+			WordList[0].splice(WordListIndex,1)
+			WordList[1].splice(WordListIndex,1)
+		}
 		NewWord();
 	}
 	else
 	{
 		document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answer + "</span>";
+		userTypos.correct_words.push(answer)
+		userTypos.user_entered.push([])
+		userTypos.user_entered[userTypos.correct_words.length - 1].push(input)
+		userClearFirstTry = false;
 	}
 }
