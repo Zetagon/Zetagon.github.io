@@ -1,3 +1,0 @@
-hej=hello
-hejdå=bye
-tack=thank you
