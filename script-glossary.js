@@ -6,7 +6,6 @@ var WordList = [];
 var Wordlist_Unmodified;
 var WordListIndex = [];
 var userClearFirstTry = true;
-var userFirstFail = true;
 var user_entered = [[], []];
 var correct_words = [];
 var playing = false;
@@ -115,11 +114,17 @@ function NewWord()
 		}
 		else
 		{
-			
-			
+			if (correct_words.length == "")
+			{
+				percent_correct = 0;
+			}
+			else
+			{
+				var percent_correct = Math.floor((100*(1 - correct_words.length/WordList_Unmodified[0].length)) + 0.5);
+			}
 			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
 			document.getElementById("phrase").innerHTML = "⟳";
-			document.getElementById("response").innerHTML = "<span style = 'color: red;'>Minor Errors!</span><br></br><span style = 'color: gray;'>See if you can get them all right!<br></br>Bellow is a table containing your mistakes.</span>";
+			document.getElementById("response").innerHTML = "<span style = 'color: red;'>" + percent_correct + "% correct!</span><br></br><span style = 'color: gray;'>Next time, see if you can get them all right!<br></br>Bellow is a table containing your mistakes.</span>";
 			
 			outputstring += "<tbody><tr><th>Correct answer</th><th>Your answers</th></tr>"
 			for(var i = 0; i < correct_words.length; i++)
@@ -158,7 +163,6 @@ function NewWord()
 	{
 		WordListIndex = getRandomArbitrary(0, (WordList[0].length));
 		userClearFirstTry = true
-		userFirstFail = true;
 		if(reversed)
 		{
 			var left = 0;
@@ -194,7 +198,6 @@ function Start_Glossary()
 	}
 	document.getElementById("table_of_wrongs").innerHTML = "";
 	userClearFirstTry = true;
-	userFirstFail = true;
 	user_entered = [[], []];
 	correct_words = [];
 	WordList = JSON.parse(JSON.stringify(WordList_Unmodified));
@@ -221,14 +224,15 @@ function HandleInput()
 			}
 			else
 			{
-				if(userFirstFail)
+				var exist_here = correct_words.indexOf(answer);
+				if(exist_here == -1)
 				{
-					userFirstFail = false;
 					correct_words.push(answer);
 					user_entered.push([]);
+					exist_here = (correct_words.length - 1)
 				}		
 				document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answer + "</span>";
-				user_entered[correct_words.length -1].push(input)
+				user_entered[exist_here].push(input);
 				userClearFirstTry = false;
 			}
 	}
