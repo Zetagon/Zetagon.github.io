@@ -213,8 +213,8 @@ function HandleInput()
 				if(userFirstFail)
 				{
 					userFirstFail = false;
-					correct_words.push(answer)
-					user_entered.push("")
+					correct_words.push(answer);
+					user_entered.push([]);
 				}		
 				document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answer + "</span>";
 				user_entered[correct_words.length -1].push(input)
