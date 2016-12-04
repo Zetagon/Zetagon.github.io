@@ -11,6 +11,13 @@ var correct_words = [];
 var playing = false;
 var firstRound = true;
 
+function swapWordList()
+{
+	var tempWordList = WordList[0]
+	WordList[0] = WordList[1]
+	WordList[1] = tempWordList
+}
+
 window.onload = function LoadMenu()
 {
 	var ListIndex = GetWordListFromServer("Word_List_Index.txt");
@@ -38,6 +45,7 @@ function ReverseButtonPressed()
 		{
 			reversed = false;
 		}
+		swapWordList()
 		NewWord();
 	}
 	else
@@ -163,18 +171,18 @@ function NewWord()
 	{
 		WordListIndex = getRandomArbitrary(0, (WordList[0].length));
 		userClearFirstTry = true
-		if(reversed)
-		{
-			var left = 0;
-			var right = 1;
-		}
-		else
-		{
-			var left = 1;
-			var right = 0;
-		}
-		output = WordList[left][WordListIndex];
-		answer = WordList[right][WordListIndex];
+		// if(reversed)
+		// {
+			// var left = 0;
+			// var right = 1;
+		// }
+		// else
+		// {
+			// var left = 1;
+			// var right = 0;
+		// }
+		output = WordList[0][WordListIndex];
+		answer = WordList[1][WordListIndex];
 		document.getElementById("phrase").innerHTML = output;
 
 	}
@@ -202,10 +210,16 @@ function Start_Glossary()
 	correct_words = [];
 	WordList = JSON.parse(JSON.stringify(WordList_Unmodified));
 	document.getElementById("phrase").removeAttribute("onclick");
+	if(reversed)
+	{
+		swapWordList()
+	}
+		
 	
 	SaveAndClearInput();
 	NewWord();
 }
+
 
 function HandleInput()
 {
