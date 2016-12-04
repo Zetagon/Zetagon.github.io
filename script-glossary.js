@@ -32,14 +32,14 @@ function ReverseButtonPressed()
 	if(playing)
 	{
 		if (reversed == false)
-	{
-		reversed = true;
-	}
-	else
-	{
-		reversed = false;
-	}
-	NewWord();
+		{
+			reversed = true;
+		}
+		else
+		{
+			reversed = false;
+		}
+		NewWord();
 	}
 	else
 	{
@@ -115,6 +115,8 @@ function NewWord()
 		}
 		else
 		{
+			
+			
 			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
 			document.getElementById("phrase").innerHTML = "⟳";
 			document.getElementById("response").innerHTML = "<span style = 'color: red;'>Minor Errors!</span><br></br><span style = 'color: gray;'>See if you can get them all right!<br></br>Bellow is a table containing your mistakes.</span>";
@@ -127,7 +129,14 @@ function NewWord()
 				{
 					if (user_entered[i][j] != "")
 					{
-						user_funny_typos += (user_entered[i][j] + ", ");
+						if(j + 1 == user_entered[i].length)
+						{
+							user_funny_typos += (user_entered[i][j]);
+						}
+						else
+						{
+							user_funny_typos += (user_entered[i][j] + ", ");
+						}
 					}
 				}
 				var temp = "<tr><td>" + correct_words[i] + "</td><td>" + user_funny_typos + "</td></tr>";
@@ -138,7 +147,7 @@ function NewWord()
 		}
 
 	}
-	
+
 	if(WordList[0].length == 0)
 	{
 		playing = false;
@@ -174,6 +183,7 @@ function SaveAndClearInput()
 
 function Start_Glossary()
 {
+	playing = true;
 	if(firstRound == true)
 	{
 		document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>Type your answer above to get started!</span>";
@@ -183,7 +193,6 @@ function Start_Glossary()
 		document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>You know how this works!</span>";
 	}
 	document.getElementById("table_of_wrongs").innerHTML = "";
-	playing = true;
 	userClearFirstTry = true;
 	userFirstFail = true;
 	user_entered = [[], []];
@@ -222,7 +231,6 @@ function HandleInput()
 				user_entered[correct_words.length -1].push(input)
 				userClearFirstTry = false;
 			}
-
 	}
 	else
 	{
