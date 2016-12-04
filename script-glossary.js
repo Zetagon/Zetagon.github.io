@@ -1,20 +1,14 @@
-var input;
+var input = "";
 var reversed = false;
-var output;
-var answer;
-var WordList;
-var WordListIndex;
+var output = "";
+var answer = "";
+var WordList = [];
+var Wordlist_Unmodified = [];
+var WordListIndex = [];
 var userClearFirstTry = true;
-var userTypos = new function(){
-	// var correct_words = [];
-	 var temp1 = []
-	 var temp2 = []
-	// var user_entered = temp1 + temp2
-	this.correct_words =[]
-	this.user_entered = [[]]
-}
-// userTypos.correct_words = []
-// userTypos.user_entered = [] + []
+var userFirstFail = true;
+var user_entered = [[], []];
+var correct_words =[];
 
 window.onload = function LoadMenu()
 {
@@ -23,13 +17,12 @@ window.onload = function LoadMenu()
 	{
 		document.getElementById("left_menu").innerHTML += "<li class = 'navigation_item' onclick='CallbackFunction(\"" + ListIndex[1][i] + "\")'>" + ListIndex[0][i] + "</li>";
 	}
-	
 }
 
 function CallbackFunction(filepath)
 {
-	WordList = GetWordListFromServer("words/" + filepath);
-	NewWord();
+	WordList_Unmodified = GetWordListFromServer("words/" + filepath);
+	Start_Glossary();
 }
 
 function ReverseButtonPressed()
@@ -91,34 +84,48 @@ return BothLists;
 }
 function getRandomArbitrary(min, max)
 {
-    return Math.floor(Math.random() * (max + 1 - min) + min);  // värdet kan aldrig anta MAX då Math.random aldrig kan bli ett därför adderars 1
+    return Math.floor(Math.random() * (max - min) + min);  // värdet kan aldrig anta MAX då Math.random aldrig kan bli ett därför adderars 1
 }
 function NewWord()
 {
 	function printScore()
 	{
-		var table = document.getElementById("table_of_wrongs")
-		var outputstring;
-		for(var i = 0; i < userTypos.correct_words.lengt; i++)
+		var outputstring = "";
+		if(correct_words == "")
 		{
-			var temp = "<tr><td>" +
-				userTypos.correct_words[i] + 
-				"</td><td>" +
-				userTypos.user_entered +
-				"</td>";
-			outputstring += temp;
+			document.getElementById("phrase").innerHTML = "↺";
+			document.getElementById("response").innerHTML = "<span style = 'color: Green;'>All Correct!</span><br></br><span style = 'color: gray;'>Congratulations!</span>";
 		}
-		table.innerHTML = outputstring;
+		else
+		{
+			outputstring += "<tbody>"
+			for(var i = 0; i < correct_words.length; i++)
+			{
+				var user_funny_typos = "";
+				for(var j = 0; j < user_entered[i].length; j++)
+				{
+					if (user_entered[i][j] != "")
+					{
+						user_funny_typos += (user_entered[i][j] + ", ");
+					}
+				}
+				var temp = "<tr><td>" + correct_words[i] + "</td><td>" + user_funny_typos + "</td></tr>";
+				outputstring += temp + "</tbody>";
+			}
+			document.getElementById("table_of_wrongs").innerHTML = outputstring;	
+		}
+
 	}
 	
-	if(WordList[0].length === 0)
+	if(WordList[0].length == 0)
 	{
-		printScore()
+		printScore();
 	}
 	else
 	{
-		WordListIndex = getRandomArbitrary(0, (WordList[0].length -1));
+		WordListIndex = getRandomArbitrary(0, (WordList[0].length));
 		userClearFirstTry = true
+		userFirstFail = true;
 		if(reversed)
 		{
 			var left = 0;
@@ -140,6 +147,19 @@ function SaveAndClearInput()
 	input = document.getElementById("leosinput").value;
 	document.getElementById("leosinput").value = "";
 }
+
+function Start_Glossary()
+{
+	userClearFirstTry = true;
+	userFirstFail = true;
+	user_entered = [[], []];
+	correct_words =[];
+	WordList = WordList_Unmodified;
+	document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>Type your answer above to get started!</span>";
+	SaveAndClearInput();
+	NewWord();
+}
+
 function HandleInput()
 {
 	SaveAndClearInput();
@@ -155,10 +175,14 @@ function HandleInput()
 	}
 	else
 	{
+		if(userFirstFail)
+		{
+			userFirstFail = false;
+			correct_words.push(answer)
+			user_entered.push("")
+		}		
 		document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answer + "</span>";
-		userTypos.correct_words.push(answer)
-		userTypos.user_entered.push([])
-		userTypos.user_entered[userTypos.correct_words.length - 1].push(input)
+		user_entered[correct_words.length -1].push(input)
 		userClearFirstTry = false;
 	}
 }
