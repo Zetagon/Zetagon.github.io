@@ -1,8 +1,16 @@
-var input;
+var input = "";
 var reversed = false;
-var output;
-var answer;
-var WordList;
+var output = "";
+var answer = "";
+var WordList = [];
+var Wordlist_Unmodified;
+var WordListIndex = [];
+var userClearFirstTry = true;
+var userFirstFail = true;
+var user_entered = [[], []];
+var correct_words = [];
+var playing = false;
+var firstRound = true;
 
 window.onload = function LoadMenu()
 {
@@ -11,18 +19,19 @@ window.onload = function LoadMenu()
 	{
 		document.getElementById("left_menu").innerHTML += "<li class = 'navigation_item' onclick='CallbackFunction(\"" + ListIndex[1][i] + "\")'>" + ListIndex[0][i] + "</li>";
 	}
-	
 }
 
 function CallbackFunction(filepath)
 {
-	WordList = GetWordListFromServer("words/" + filepath);
-	NewWord();
+	WordList_Unmodified = GetWordListFromServer("words/" + filepath);
+	Start_Glossary();
 }
 
 function ReverseButtonPressed()
 {
-	if (reversed == false)
+	if(playing)
+	{
+		if (reversed == false)
 	{
 		reversed = true;
 	}
@@ -31,6 +40,18 @@ function ReverseButtonPressed()
 		reversed = false;
 	}
 	NewWord();
+	}
+	else
+	{
+		if(firstRound == true)
+		{
+			HandleInput();
+		}
+		else
+		{
+			document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>Click the button just above that one to restart!</span>";
+		}
+	}
 }
 
 document.getElementById("leosinput").addEventListener("keydown", function(event)
@@ -39,8 +60,6 @@ document.getElementById("leosinput").addEventListener("keydown", function(event)
 	{
 		case 13:
 			HandleInput();
-		break;
-		case 38:
 		break;
 	}
 });
@@ -81,41 +100,140 @@ return BothLists;
 }
 function getRandomArbitrary(min, max)
 {
-    return Math.floor(Math.random() * (max + 1 - min) + min);  // värdet kan aldrig anta MAX då Math.random aldrig kan bli ett därför adderars 1
+    return Math.floor(Math.random() * (max - min) + min);  // värdet kan aldrig anta MAX då Math.random aldrig kan bli ett därför adderars 1
 }
 function NewWord()
 {
-	var integer = getRandomArbitrary(0, (WordList[0].length -1));
-	
-	if(reversed)
+	function printScore()
 	{
-		var left = 0;
-		var right = 1;
+		var outputstring = "";
+		if(correct_words == "")
+		{
+			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
+			document.getElementById("phrase").innerHTML = "↺";
+			document.getElementById("response").innerHTML = "<span style = 'color: Green;'>All Correct!</span><br></br><span style = 'color: gray;'>Congratulations!</span>";
+		}
+		else
+		{
+			ocument.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
+			document.getElementById("phrase").innerHTML = "↺";
+			document.getElementById("response").innerHTML = "<span style = 'color: red;'>Minor Errors!</span><br></br><span style = 'color: gray;'>See if you can get them all right!<br></br>Bellow is a table containing your mistakes.</span>";
+			
+			outputstring += "<tbody>"
+			for(var i = 0; i < correct_words.length; i++)
+			{
+				var user_funny_typos = "";
+				for(var j = 0; j < user_entered[i].length; j++)
+				{
+					if (user_entered[i][j] != "")
+					{
+						user_funny_typos += (user_entered[i][j] + ", ");
+					}
+				}
+				var temp = "<tr><td>" + correct_words[i] + "</td><td>" + user_funny_typos + "</td></tr>";
+				outputstring += temp + "</tbody>";
+			}
+			document.getElementById("table_of_wrongs").innerHTML = outputstring;	
+		}
+
+	}
+	
+	if(WordList[0].length == 0)
+	{
+		playing = false;
+		firstRound = false;
+		printScore();
 	}
 	else
 	{
-		var left = 1;
-		var right = 0;
+		WordListIndex = getRandomArbitrary(0, (WordList[0].length));
+		userClearFirstTry = true
+		userFirstFail = true;
+		if(reversed)
+		{
+			var left = 0;
+			var right = 1;
+		}
+		else
+		{
+			var left = 1;
+			var right = 0;
+		}
+		output = WordList[left][WordListIndex];
+		answer = WordList[right][WordListIndex];
+		document.getElementById("phrase").innerHTML = output;
+
 	}
-	output = WordList[left][integer];
-	answer = WordList[right][integer];
-	document.getElementById("phrase").innerHTML = output;
 }
 function SaveAndClearInput()
 {
 	input = document.getElementById("leosinput").value;
 	document.getElementById("leosinput").value = "";
 }
-function HandleInput()
+
+function Start_Glossary()
 {
-	SaveAndClearInput();
-	if (input == answer)
+	if(firstRound == true)
 	{
-		document.getElementById("response").innerHTML = "<span style = 'color: blue;'>Correct!</span>"
-		NewWord();
+		document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>Type your answer above to get started!</span>";
 	}
 	else
 	{
-		document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answer + "</span>";
+		document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>You know how this works!</span>";
+	}
+	playing = true;
+	userClearFirstTry = true;
+	userFirstFail = true;
+	user_entered = [[], []];
+	correct_words = [];
+	WordList = JSON.parse(JSON.stringify(WordList_Unmodified));
+	document.getElementById("phrase").removeAttribute("onclick");
+	
+	SaveAndClearInput();
+	NewWord();
+}
+
+function HandleInput()
+{
+	if(playing)
+	{
+			SaveAndClearInput();
+			if (input == answer)
+			{
+				document.getElementById("response").innerHTML = "<span style = 'color: blue;'>Correct!</span>"
+				if(userClearFirstTry)
+				{
+					WordList[0].splice(WordListIndex,1)
+					WordList[1].splice(WordListIndex,1)
+				}
+				NewWord();
+			}
+			else
+			{
+				if(userFirstFail)
+				{
+					userFirstFail = false;
+					correct_words.push(answer)
+					user_entered.push("")
+				}		
+				document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answer + "</span>";
+				user_entered[correct_words.length -1].push(input)
+				userClearFirstTry = false;
+			}
+
+	}
+	else
+	{
+		if(firstRound)
+		{
+			document.getElementById("response").innerHTML = "<span style = 'color: gray;'>Choose something to practice on the left!</span>";
+			document.getElementById("phrase").innerHTML = "<span style = 'color: blue;'>🡰 Left</span>";
+			document.getElementById("leosinput").value = "";
+		}
+		else
+		{
+			document.getElementById("leosinput").value = "";
+			document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>The fun is over!</span>";
+		}
 	}
 }
