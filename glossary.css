@@ -67,8 +67,8 @@ th
 }
 #footer_text
 {
-	font-size: calc(7px + 0.5vw);
-	padding-right: 25%;
+	color: #888888;
+	font-size: 1.5vw;
 	text-align: center;
 }
 #master_div
@@ -94,8 +94,8 @@ th
 }
 #left_menu
 {
-	padding-bottom: 500em;
-	margin-bottom: -500em;
+	padding-bottom: 500vw;
+	margin-bottom: -502vw;
 	float: left;
 	min-height: 100vh;
 	width: 25%;
@@ -103,8 +103,8 @@ th
 }
 #main_content
 {	
-	padding-bottom: 500em;
-	margin-bottom: -500em;
+	padding-bottom: 500vw;
+	margin-bottom: -502vw;
 	width: 75%;
 	float: left;
 	min-height: 100vh;
@@ -112,12 +112,18 @@ th
 }
 #footer_div
 {
-	position: absolute;	
-	bottom: 0;
-	width: 75%;
+	background: #fbfbfb;
+	font-size: 5vw;
 }
 #wordinput
 {
 	padding-left: 0;
 	text-align: center;
+}
+#missing_menu
+{
+	width: 25%;
+	float: left;
+	height: 2vw;
+	background: #404040;
 }
