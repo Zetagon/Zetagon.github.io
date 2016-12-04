@@ -115,7 +115,7 @@ function NewWord()
 		}
 		else
 		{
-			ocument.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
+			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
 			document.getElementById("phrase").innerHTML = "↺";
 			document.getElementById("response").innerHTML = "<span style = 'color: red;'>Minor Errors!</span><br></br><span style = 'color: gray;'>See if you can get them all right!<br></br>Bellow is a table containing your mistakes.</span>";
 			
