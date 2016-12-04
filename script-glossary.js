@@ -110,16 +110,16 @@ function NewWord()
 		if(correct_words == "")
 		{
 			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
-			document.getElementById("phrase").innerHTML = "↺";
+			document.getElementById("phrase").innerHTML = "⟳";
 			document.getElementById("response").innerHTML = "<span style = 'color: Green;'>All Correct!</span><br></br><span style = 'color: gray;'>Congratulations!</span>";
 		}
 		else
 		{
 			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
-			document.getElementById("phrase").innerHTML = "↺";
+			document.getElementById("phrase").innerHTML = "⟳";
 			document.getElementById("response").innerHTML = "<span style = 'color: red;'>Minor Errors!</span><br></br><span style = 'color: gray;'>See if you can get them all right!<br></br>Bellow is a table containing your mistakes.</span>";
 			
-			outputstring += "<tbody>"
+			outputstring += "<tbody><tr><th>Correct answer</th><th>Your answers</th></tr>"
 			for(var i = 0; i < correct_words.length; i++)
 			{
 				var user_funny_typos = "";
@@ -131,8 +131,9 @@ function NewWord()
 					}
 				}
 				var temp = "<tr><td>" + correct_words[i] + "</td><td>" + user_funny_typos + "</td></tr>";
-				outputstring += temp + "</tbody>";
+				outputstring += temp;
 			}
+			outputstring += "</tbody>";
 			document.getElementById("table_of_wrongs").innerHTML = outputstring;	
 		}
 
@@ -181,6 +182,7 @@ function Start_Glossary()
 	{
 		document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>You know how this works!</span>";
 	}
+	document.getElementById("table_of_wrongs").innerHTML = "";
 	playing = true;
 	userClearFirstTry = true;
 	userFirstFail = true;
