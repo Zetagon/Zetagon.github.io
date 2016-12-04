@@ -11,17 +11,19 @@ table
 }
 td
 {
+	color: #222222;
 	padding: 1vw;
 	font-size: 3vw;
-	border: 3px solid #909090;
+	border: 1px solid #909090;
     text-align: center;
     padding: 1wv;
 }
 th
 {
+	color: #222222;
 	padding: 1vw;
 	font-size: 3vw;
-	border: 3px solid #909090;
+	border: 1px solid #909090;
     text-align: center;
     padding: 1wv;
 }
