@@ -124,7 +124,7 @@ function NewWord()
 			}
 			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
 			document.getElementById("phrase").innerHTML = "⟳";
-			document.getElementById("response").innerHTML = "<span style = 'color: red;'>" + percent_correct + "% correct!</span><br></br><span style = 'color: gray;'>Next time, see if you can get them all right!<br></br>Bellow is a table containing your mistakes.</span>";
+			document.getElementById("response").innerHTML = "<span style = 'color: red;'>" + percent_correct + "% correct!</span><br></br><span style = 'color: gray;'>Next time, see if you can get them all right!<br></br>Here are your mistakes.</span>";
 			
 			outputstring += "<tbody><tr><th>Correct answer</th><th>Your answers</th></tr>"
 			for(var i = 0; i < correct_words.length; i++)
