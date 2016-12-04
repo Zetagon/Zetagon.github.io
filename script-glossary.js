@@ -3,12 +3,14 @@ var reversed = false;
 var output = "";
 var answer = "";
 var WordList = [];
-var Wordlist_Unmodified = [];
+var Wordlist_Unmodified;
 var WordListIndex = [];
 var userClearFirstTry = true;
 var userFirstFail = true;
 var user_entered = [[], []];
-var correct_words =[];
+var correct_words = [];
+var playing = false;
+var firstRound = true;
 
 window.onload = function LoadMenu()
 {
@@ -27,7 +29,9 @@ function CallbackFunction(filepath)
 
 function ReverseButtonPressed()
 {
-	if (reversed == false)
+	if(playing)
+	{
+		if (reversed == false)
 	{
 		reversed = true;
 	}
@@ -36,6 +40,18 @@ function ReverseButtonPressed()
 		reversed = false;
 	}
 	NewWord();
+	}
+	else
+	{
+		if(firstRound == true)
+		{
+			HandleInput();
+		}
+		else
+		{
+			document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>Click the button just above that one to restart!</span>";
+		}
+	}
 }
 
 document.getElementById("leosinput").addEventListener("keydown", function(event)
@@ -93,11 +109,16 @@ function NewWord()
 		var outputstring = "";
 		if(correct_words == "")
 		{
+			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
 			document.getElementById("phrase").innerHTML = "↺";
 			document.getElementById("response").innerHTML = "<span style = 'color: Green;'>All Correct!</span><br></br><span style = 'color: gray;'>Congratulations!</span>";
 		}
 		else
 		{
+			ocument.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
+			document.getElementById("phrase").innerHTML = "↺";
+			document.getElementById("response").innerHTML = "<span style = 'color: red;'>Minor Errors!</span><br></br><span style = 'color: gray;'>See if you can get them all right!<br></br>Bellow is a table containing your mistakes.</span>";
+			
 			outputstring += "<tbody>"
 			for(var i = 0; i < correct_words.length; i++)
 			{
@@ -119,6 +140,8 @@ function NewWord()
 	
 	if(WordList[0].length == 0)
 	{
+		playing = false;
+		firstRound = false;
 		printScore();
 	}
 	else
@@ -150,39 +173,67 @@ function SaveAndClearInput()
 
 function Start_Glossary()
 {
+	if(firstRound == true)
+	{
+		document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>Type your answer above to get started!</span>";
+	}
+	else
+	{
+		document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>You know how this works!</span>";
+	}
+	playing = true;
 	userClearFirstTry = true;
 	userFirstFail = true;
 	user_entered = [[], []];
-	correct_words =[];
-	WordList = WordList_Unmodified;
-	document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>Type your answer above to get started!</span>";
+	correct_words = [];
+	WordList = JSON.parse(JSON.stringify(WordList_Unmodified));
+	document.getElementById("phrase").removeAttribute("onclick");
+	
 	SaveAndClearInput();
 	NewWord();
 }
 
 function HandleInput()
 {
-	SaveAndClearInput();
-	if (input == answer)
+	if(playing)
 	{
-		document.getElementById("response").innerHTML = "<span style = 'color: blue;'>Correct!</span>"
-		if(userClearFirstTry)
-		{
-			WordList[0].splice(WordListIndex,1)
-			WordList[1].splice(WordListIndex,1)
-		}
-		NewWord();
+			SaveAndClearInput();
+			if (input == answer)
+			{
+				document.getElementById("response").innerHTML = "<span style = 'color: blue;'>Correct!</span>"
+				if(userClearFirstTry)
+				{
+					WordList[0].splice(WordListIndex,1)
+					WordList[1].splice(WordListIndex,1)
+				}
+				NewWord();
+			}
+			else
+			{
+				if(userFirstFail)
+				{
+					userFirstFail = false;
+					correct_words.push(answer)
+					user_entered.push("")
+				}		
+				document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answer + "</span>";
+				user_entered[correct_words.length -1].push(input)
+				userClearFirstTry = false;
+			}
+
 	}
 	else
 	{
-		if(userFirstFail)
+		if(firstRound)
 		{
-			userFirstFail = false;
-			correct_words.push(answer)
-			user_entered.push("")
-		}		
-		document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answer + "</span>";
-		user_entered[correct_words.length -1].push(input)
-		userClearFirstTry = false;
+			document.getElementById("response").innerHTML = "<span style = 'color: gray;'>Choose something to practice on the left!</span>";
+			document.getElementById("phrase").innerHTML = "<span style = 'color: blue;'>🡰 Left</span>";
+			document.getElementById("leosinput").value = "";
+		}
+		else
+		{
+			document.getElementById("leosinput").value = "";
+			document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>The fun is over!</span>";
+		}
 	}
 }
