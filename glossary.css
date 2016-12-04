@@ -3,6 +3,34 @@ body
 	margin: 0;
 	padding: 0;
 }
+table
+{
+	margin: 0 auto;
+	border-collapse: collapse;
+    width: 85%;
+}
+td
+{
+	padding: 1vw;
+	font-size: 3vw;
+	border: 3px solid #909090;
+    text-align: center;
+    padding: 1wv;
+}
+th
+{
+	padding: 1vw;
+	font-size: 3vw;
+	border: 3px solid #909090;
+    text-align: center;
+    padding: 1wv;
+}
+#table_div
+{
+	margin: 0 auto;
+	text-align: center;
+	padding: 1vw;
+}
 #phrase
 {
 	margin: 1vw;
