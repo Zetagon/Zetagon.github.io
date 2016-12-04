@@ -115,7 +115,7 @@ function NewWord()
 		}
 		else
 		{
-			ocument.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
+			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
 			document.getElementById("phrase").innerHTML = "↺";
 			document.getElementById("response").innerHTML = "<span style = 'color: red;'>Minor Errors!</span><br></br><span style = 'color: gray;'>See if you can get them all right!<br></br>Bellow is a table containing your mistakes.</span>";
 			
@@ -213,8 +213,8 @@ function HandleInput()
 				if(userFirstFail)
 				{
 					userFirstFail = false;
-					correct_words.push(answer)
-					user_entered.push("")
+					correct_words.push(answer);
+					user_entered.push([]);
 				}		
 				document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answer + "</span>";
 				user_entered[correct_words.length -1].push(input)
