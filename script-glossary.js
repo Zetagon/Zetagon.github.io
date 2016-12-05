@@ -241,7 +241,7 @@ function HandleInput()
 		if(firstRound)
 		{
 			document.getElementById("response").innerHTML = "<span style = 'color: gray;'>Choose something to practice on the left!</span>";
-			document.getElementById("phrase").innerHTML = "<span style = 'color: blue;'>← Left</span>";
+			document.getElementById("phrase").innerHTML = "<span style = 'color: #00ff00;'>← Left</span>";
 			document.getElementById("leosinput").value = "";
 		}
 		else
