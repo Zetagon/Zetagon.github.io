@@ -1,5 +1,5 @@
 var input = "";
-var reversed = false;
+var reversed = true;
 var output = "";
 var answer = "";
 var WordList = [];
