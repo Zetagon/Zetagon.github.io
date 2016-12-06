@@ -171,16 +171,6 @@ function NewWord()
 	{
 		WordListIndex = getRandomArbitrary(0, (WordList[0].length));
 		userClearFirstTry = true
-		// if(reversed)
-		// {
-			// var left = 0;
-			// var right = 1;
-		// }
-		// else
-		// {
-			// var left = 1;
-			// var right = 0;
-		// }
 		output = WordList[0][WordListIndex];
 		answer = WordList[1][WordListIndex];
 		document.getElementById("phrase").innerHTML = output;
