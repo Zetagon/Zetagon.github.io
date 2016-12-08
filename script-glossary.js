@@ -13,9 +13,7 @@ var firstRound = true;
 
 function swapWordList()
 {
-	var tempWordList = WordList[0]
-	WordList[0] = WordList[1]
-	WordList[1] = tempWordList
+	WordList.reverse()
 }
 
 window.onload = function LoadMenu()
