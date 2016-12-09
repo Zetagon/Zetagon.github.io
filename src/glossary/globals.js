@@ -1,0 +1,12 @@
+var input = "";
+var reversed = true;
+var output = "";
+var answer = "";
+var WordList = [];
+var Wordlist_Unmodified;
+var WordListIndex = [];
+var userClearFirstTry = true;
+var user_entered = [[], []];
+var correct_words = [];
+var playing = false;
+var firstRound = true;
