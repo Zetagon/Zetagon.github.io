@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "target": "es5",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "outFile":"tscbin/script-glossary-compiled.js"
+    },
+    "files": [
+        "src/script-glossary.ts",
+        "src/WordListHandler.ts"
+    ]
+}
