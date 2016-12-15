@@ -22,7 +22,17 @@ window.onload = function LoadMenu()
 	var ListIndex = GetWordListFromServer("Word_List_Index.txt");
 	for(i = 0; i < ListIndex[0].length; i++)
 	{
-		document.getElementById("left_menu").innerHTML += "<li class = 'navigation_item' onclick='CallbackFunction(\"" + ListIndex[1][i] + "\")'>" + ListIndex[0][i] + "</li>";
+		var teacherApproved = ListIndex[0][i].match(/\@approved/)
+		if(teacherApproved)
+		{
+			ListIndex[0][i] = ListIndex[0][i].replace(/\@approved/g, '')
+			document.getElementById("left_menu").innerHTML += "<li class = 'navigation_item tooltip' onclick='CallbackFunction(\"" + ListIndex[1][i] + "\")'>" + ListIndex[0][i] + "<span class = 'tooltiptext'>Teacher approved!</span></li>";
+		}
+		else
+		{
+
+			document.getElementById("left_menu").innerHTML += "<li class = 'navigation_item' onclick='CallbackFunction(\"" + ListIndex[1][i] + "\")'>" + ListIndex[0][i] + "</li>";
+		}	
 	}
 }
 
