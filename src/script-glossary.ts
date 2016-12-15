@@ -1,15 +1,15 @@
-var input = "";
-var reversed = true;
-var output = "";
-var answer = "";
-var WordList = [];
-var Wordlist_Unmodified;
-var WordListIndex = [];
+var input:string = "";
+var reversed:boolean = true;
+var output:string = "";
+var answer:string = "";
+var WordList:Array<Array<string>> = [];
+var Wordlist_Unmodified:Array<Array<string>> = [[]];
+var WordListIndex:number;
 var userClearFirstTry = true;
-var user_entered = [[], []];
-var correct_words = [];
-var playing = false;
-var firstRound = true;
+var user_entered:Array<Array<string>> = [[], []];
+var correct_words:Array<string> = [];
+var playing:boolean = false;
+var firstRound:boolean = true;
 
 function swapWordList()
 {
@@ -19,8 +19,8 @@ function swapWordList()
 window.onload = function LoadMenu()
 {
 	document.title = "English Plus";
-	var ListIndex = GetWordListFromServer("Word_List_Index.txt");
-	for(i = 0; i < ListIndex[0].length; i++)
+	var ListIndex:Array<Array<string>> = GetWordListFromServer("Word_List_Index.txt");
+	for(let i = 0; i < ListIndex[0].length; i++)
 	{
 		var teacherApproved = ListIndex[0][i].match(/\@approved/)
 		if(teacherApproved)
@@ -36,7 +36,7 @@ window.onload = function LoadMenu()
 	}
 }
 
-function CallbackFunction(filepath)
+function CallbackFunction(filepath:string)
 {
 	WordList_Unmodified = GetWordListFromServer("words/" + filepath);
 	Start_Glossary();
@@ -80,12 +80,12 @@ document.getElementById("leosinput").addEventListener("keydown", function(event)
 	}
 });
 
-function GetWordListFromServer(filename)
+function GetWordListFromServer(filename:string)
 {
-var ListLeft = [];
-var ListRight = [];
+var ListLeft:Array<string> = [];
+var ListRight:Array<string> = [];
 var BothLists;
-var server_file_request;
+var server_file_request:XMLHttpRequest;
 if(window.XMLHttpRequest)  // checking if the browser is using the old or the new system for XMLHttpRequests and adapting
 {
     server_file_request = new XMLHttpRequest();
@@ -99,8 +99,8 @@ server_file_request.onreadystatechange = function()  // This function will run w
     if (server_file_request.readyState==4 && server_file_request.status==200)  // When this is the case the response is ready to collect
 	{
 		var wordfiletext = server_file_request.responseText;  // The file is saved to a variable in order to not rely on the XMLHttpRequest anymore
-		var wordpairs = wordfiletext.split(/\r\n|\r|\n/g);  // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
-		for (i = 0; i < wordpairs.length; i++)  // Splitting the wordpairs into induvidual words and saving them to a left and right word-list
+		var wordpairs:Array<string> = wordfiletext.split(/\r\n|\r|\n/g);  // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
+		for (let i = 0; i < wordpairs.length; i++)  // Splitting the wordpairs into induvidual words and saving them to a left and right word-list
 		{
 			var wordpair = wordpairs[i].split("=");
 			ListLeft[i]=wordpair[0];
@@ -114,7 +114,7 @@ server_file_request.open("GET",filename ,false);  // Preparing a GET request for
 server_file_request.send();  // Sending the request
 return BothLists;
 }
-function getRandomArbitrary(min, max)
+function getRandomArbitrary(min:number, max:number)
 {
     return Math.floor(Math.random() * (max - min) + min);  // värdet kan aldrig anta MAX då Math.random aldrig kan bli ett därför adderars 1
 }
@@ -123,7 +123,7 @@ function NewWord()
 	function printScore()
 	{
 		var outputstring = "";
-		if(correct_words == "")
+		if(correct_words == [])
 		{
 			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
 			document.getElementById("phrase").innerHTML = "⟳";
@@ -131,7 +131,7 @@ function NewWord()
 		}
 		else
 		{
-			if (correct_words.length == "")
+			if (correct_words.length == 0)
 			{
 				percent_correct = 0;
 			}
@@ -188,8 +188,8 @@ function NewWord()
 }
 function SaveAndClearInput()
 {
-	input = document.getElementById("leosinput").value;
-	document.getElementById("leosinput").value = "";
+	input = (<HTMLInputElement>document.getElementById("leosinput")).value;
+	(<HTMLInputElement>document.getElementById("leosinput")).value = "";
 }
 
 function Start_Glossary()
@@ -255,11 +255,11 @@ function HandleInput()
 		{
 			document.getElementById("response").innerHTML = "<span style = 'color: gray;'>Choose something to practice on the left!</span>";
 			document.getElementById("phrase").innerHTML = "<span style = 'color: #00ff00;'>← Left</span>";
-			document.getElementById("leosinput").value = "";
+			(<HTMLInputElement>document.getElementById("leosinput")).value = "";
 		}
 		else
 		{
-			document.getElementById("leosinput").value = "";
+			(<HTMLInputElement>document.getElementById("leosinput")).value = "";
 			document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>The fun is over!</span>";
 		}
 	}
