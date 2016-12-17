@@ -1,3 +1,5 @@
+////// <reference path="sheets-id.ts" />
+
 var input:string = "";
 var reversed:boolean = true;
 var output:string = "";
@@ -19,6 +21,33 @@ function swapWordList()
 window.onload = function LoadMenu()
 {
 	document.title = "English Plus";
+	let constID:string = "1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds";
+	
+	getSheetGlossaryNames(constID, function(ary){
+		;
+		
+		let wordNames = "ljlk";
+		 wordNames = JSON.parse(ary).values;
+		 wordNames = wordNames[0]
+		for(let i = 0; i < wordNames.length; i++)
+		{
+			if(wordNames[i] == "")
+			{
+				wordNames.splice(i,1);
+			}	
+		}
+		
+		for(let i = 0; i < wordNames.length ; i++)
+		{
+			let temp =  "<li class = 'navigation_item' onclick='CallbackSheets(\"" + constID + "\",\"" + wordNames[i] + "\")'>" + wordNames[i] + "</li>"
+			document.getElementById("left_menu").innerHTML +=temp;
+		}
+		
+		
+	});
+	
+
+	
 	var ListIndex:Array<Array<string>> = GetWordListFromServer("Word_List_Index.txt");
 	for(let i = 0; i < ListIndex[0].length; i++)
 	{
@@ -35,7 +64,10 @@ window.onload = function LoadMenu()
 		}	
 	}
 }
-
+function CallbackSheets(id:string , name:string )
+{
+	WordList = getWordListFromSheet(id, name);
+}
 function CallbackFunction(filepath:string)
 {
 	WordList_Unmodified = GetWordListFromServer("words/" + filepath);
