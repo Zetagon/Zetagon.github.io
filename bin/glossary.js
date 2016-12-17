@@ -1,10 +1,11 @@
+////// <reference path="sheets-id.ts" />
 var input = "";
 var reversed = true;
 var output = "";
 var answer = "";
 var WordList = [];
-var Wordlist_Unmodified;
-var WordListIndex = [];
+var Wordlist_Unmodified = [[]];
+var WordListIndex;
 var userClearFirstTry = true;
 var user_entered = [[], []];
 var correct_words = [];
@@ -15,8 +16,22 @@ function swapWordList() {
 }
 window.onload = function LoadMenu() {
     document.title = "English Plus";
+    var constID = "1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds";
+    getSheetGlossaryNames(constID, function (ary) {
+        var wordNames = JSON.parse(ary).values;
+        wordNames = wordNames[0];
+        for (var i = 0; i < wordNames.length; i++) {
+            if (wordNames[i] == "") {
+                wordNames.splice(i, 1);
+            }
+        }
+        for (var i = 0; i < wordNames.length; i++) {
+            var temp = "<li class = 'navigation_item' onclick='CallbackSheets(\"" + constID + "\",\"" + wordNames[i] + "\")'>" + wordNames[i] + "</li>";
+            document.getElementById("left_menu").innerHTML += temp;
+        }
+    });
     var ListIndex = GetWordListFromServer("Word_List_Index.txt");
-    for (i = 0; i < ListIndex[0].length; i++) {
+    for (var i = 0; i < ListIndex[0].length; i++) {
         var teacherApproved = ListIndex[0][i].match(/\@approved/);
         if (teacherApproved) {
             ListIndex[0][i] = ListIndex[0][i].replace(/\@approved/g, '');
@@ -27,6 +42,19 @@ window.onload = function LoadMenu() {
         }
     }
 };
+function CallbackSheets(id, name) {
+    getWordListFromSheet(id, name, function (ary) {
+        ary = JSON.parse(ary).values;
+        for (var i = 0; i < ary.length; i++) {
+            if (ary[i][0] == name) {
+                ary[i].splice(0, 1);
+                ary[i + 1].splice(0, 1);
+                WordList_Unmodified = [ary[i], ary[i + 1]];
+            }
+        }
+        Start_Glossary();
+    });
+}
 function CallbackFunction(filepath) {
     WordList_Unmodified = GetWordListFromServer("words/" + filepath);
     Start_Glossary();
@@ -73,7 +101,7 @@ function GetWordListFromServer(filename) {
         if (server_file_request.readyState == 4 && server_file_request.status == 200) {
             var wordfiletext = server_file_request.responseText; // The file is saved to a variable in order to not rely on the XMLHttpRequest anymore
             var wordpairs = wordfiletext.split(/\r\n|\r|\n/g); // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
-            for (i = 0; i < wordpairs.length; i++) {
+            for (var i = 0; i < wordpairs.length; i++) {
                 var wordpair = wordpairs[i].split("=");
                 ListLeft[i] = wordpair[0];
                 ListRight[i] = wordpair[1];
@@ -91,13 +119,13 @@ function getRandomArbitrary(min, max) {
 function NewWord() {
     function printScore() {
         var outputstring = "";
-        if (correct_words == "") {
+        if (correct_words == []) {
             document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
             document.getElementById("phrase").innerHTML = "⟳";
             document.getElementById("response").innerHTML = "<span style = 'color: Green;'>All Correct!</span><br></br><span style = 'color: gray;'>Congratulations!</span>";
         }
         else {
-            if (correct_words.length == "") {
+            if (correct_words.length == 0) {
                 percent_correct = 0;
             }
             else {
@@ -197,5 +225,63 @@ function HandleInput() {
             document.getElementById("response").innerHTML = "<span style = 'color: Gray;'>The fun is over!</span>";
         }
     }
+}
+/**
+ * @param Spreadsheet-id to fetch word-lists from
+ */
+function getSheetGlossaryNames(id, callback) {
+    var returnAry = ["test1", "test2"];
+    var xml = new XMLHttpRequest();
+    var range = "A1:Z1";
+    var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/Sheet1!" + range + "?majorDimension=ROWS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
+    //let url = "https://sheets.googleapis.com/v4/spreadsheets/1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds?ranges=A1%3AZ&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ"
+    xml.open("GET", url, true);
+    xml.setRequestHeader("Content-type", "application/json");
+    xml.onreadystatechange = function () {
+        if (this.readyState == XMLHttpRequest.DONE) {
+            //returnAry = JSON.parse(xml.response).values;
+            //for(let i = 0; i < returnAry.length; i++)
+            //{
+            //    if(returnAry[i].length == 0)
+            //    {
+            //        returnAry.splice(i, 1);
+            //    }
+            // }
+            // alert(returnAry)
+            callback(this.responseText);
+        }
+    };
+    xml.send();
+    return returnAry;
+}
+/**
+ * return a wordlist from a google Spreadsheet
+ * @param id Spreadsheet-id
+ * @param name the name of the wordlist to get
+ */
+function getWordListFromSheet(id, name, callback) {
+    var returnAry;
+    var xml = new XMLHttpRequest();
+    var range = "A1:Z";
+    var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/Sheet1!" + range + "?majorDimension=COLUMNS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
+    //let url = "https://sheets.googleapis.com/v4/spreadsheets/1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds?ranges=A1%3AZ&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ"
+    xml.open("GET", url, true);
+    xml.setRequestHeader("Content-type", "application/json");
+    xml.onreadystatechange = function () {
+        if (this.readyState == XMLHttpRequest.DONE) {
+            //returnAry = JSON.parse(xml.response).values;
+            //for(let i = 0; i < returnAry.length; i++)
+            //{
+            //    if(returnAry[i].length == 0)
+            //    {
+            //        returnAry.splice(i, 1);
+            //    }
+            // }
+            // alert(returnAry)
+            callback(this.responseText);
+        }
+    };
+    xml.send();
+    return returnAry;
 }
 //# sourceMappingURL=glossary.js.map
