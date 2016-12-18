@@ -3,8 +3,8 @@ var reversed = true;
 var output = "";
 var answer = "";
 var WordList = [];
-var Wordlist_Unmodified;
-var WordListIndex = [];
+var Wordlist_Unmodified = [[]];
+var WordListIndex;
 var userClearFirstTry = true;
 var user_entered = [[], []];
 var correct_words = [];
@@ -16,7 +16,7 @@ function swapWordList() {
 window.onload = function LoadMenu() {
     document.title = "English Plus";
     var ListIndex = GetWordListFromServer("Word_List_Index.txt");
-    for (i = 0; i < ListIndex[0].length; i++) {
+    for (var i = 0; i < ListIndex[0].length; i++) {
         var teacherApproved = ListIndex[0][i].match(/\@approved/);
         if (teacherApproved) {
             ListIndex[0][i] = ListIndex[0][i].replace(/\@approved/g, '');
@@ -73,7 +73,7 @@ function GetWordListFromServer(filename) {
         if (server_file_request.readyState == 4 && server_file_request.status == 200) {
             var wordfiletext = server_file_request.responseText; // The file is saved to a variable in order to not rely on the XMLHttpRequest anymore
             var wordpairs = wordfiletext.split(/\r\n|\r|\n/g); // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
-            for (i = 0; i < wordpairs.length; i++) {
+            for (var i = 0; i < wordpairs.length; i++) {
                 var wordpair = wordpairs[i].split("=");
                 ListLeft[i] = wordpair[0];
                 ListRight[i] = wordpair[1];
@@ -91,13 +91,13 @@ function getRandomArbitrary(min, max) {
 function NewWord() {
     function printScore() {
         var outputstring = "";
-        if (correct_words == "") {
+        if (correct_words == []) {
             document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
             document.getElementById("phrase").innerHTML = "⟳";
             document.getElementById("response").innerHTML = "<span style = 'color: Green;'>All Correct!</span><br></br><span style = 'color: gray;'>Congratulations!</span>";
         }
         else {
-            if (correct_words.length == "") {
+            if (correct_words.length == 0) {
                 percent_correct = 0;
             }
             else {
