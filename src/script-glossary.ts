@@ -1,3 +1,5 @@
+////// <reference path="sheets-id.ts" />
+
 var input:string = "";
 var reversed:boolean = true;
 var output:string = "";
@@ -10,6 +12,7 @@ var user_entered:Array<Array<string>> = [[], []];
 var correct_words:Array<string> = [];
 var playing:boolean = false;
 var firstRound:boolean = true;
+let sheetAry:Array<Array<string>>
 
 function swapWordList()
 {
@@ -19,6 +22,20 @@ function swapWordList()
 window.onload = function LoadMenu()
 {
 	document.title = "English Plus";
+	let sheetID:string = "1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds";
+	
+	//putSheetGlossaryNames(sheetID);				
+	getSheet(sheetID, function(returnAry){
+		sheetAry = returnAry;
+		for(let i = 0; i < sheetAry.length; i++){
+			if(sheetAry[i][0])
+			{
+				document.getElementById("left_menu").innerHTML += "<li class = 'navigation_item' onclick = 'callbackSheetAry(\"" + sheetAry[i][0] + "\")'>" + sheetAry[i][0] + "</li>"
+			}
+		}		
+	})
+
+	
 	var ListIndex:Array<Array<string>> = GetWordListFromServer("Word_List_Index.txt");
 	for(let i = 0; i < ListIndex[0].length; i++)
 	{
@@ -35,10 +52,38 @@ window.onload = function LoadMenu()
 		}	
 	}
 }
-
+function callbackSheetAry(name:string)
+{
+	for(let i = 0; i < sheetAry.length; i++)
+	{
+		if(sheetAry[i][0] == name)
+		{
+				Wordlist_Unmodified = JSON.parse(JSON.stringify([sheetAry[i],sheetAry[i+1]]));
+				Wordlist_Unmodified[0].splice(0,1);//delete first row, i.e the names
+				Wordlist_Unmodified[1].splice(0,1);//delete first row, i.e the names
+				Start_Glossary();
+				return;
+		}
+	}
+}
+function CallbackSheets(id:string , name:string )
+{
+	getWordListFromSheet(id, name,function(ary){
+		ary = JSON.parse(ary).values;
+		for(let i = 0; i < ary.length;i++){
+			if(ary[i][0] == name)
+			{
+				ary[i].splice(0,1)
+				ary[i + 1].splice(0,1)
+				Wordlist_Unmodified = [ary[i], ary[i + 1]]; 
+			}
+		}
+		Start_Glossary();
+	});
+}
 function CallbackFunction(filepath:string)
 {
-	WordList_Unmodified = GetWordListFromServer("words/" + filepath);
+	Wordlist_Unmodified = GetWordListFromServer("words/" + filepath);
 	Start_Glossary();
 }
 
@@ -137,7 +182,7 @@ function NewWord()
 			}
 			else
 			{
-				var percent_correct = Math.floor((100*(1 - correct_words.length/WordList_Unmodified[0].length)) + 0.5);
+				var percent_correct = Math.floor((100*(1 - correct_words.length/Wordlist_Unmodified[0].length)) + 0.5);
 			}
 			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
 			document.getElementById("phrase").innerHTML = "⟳";
@@ -207,7 +252,7 @@ function Start_Glossary()
 	userClearFirstTry = true;
 	user_entered = [[], []];
 	correct_words = [];
-	WordList = JSON.parse(JSON.stringify(WordList_Unmodified));
+	WordList = JSON.parse(JSON.stringify(Wordlist_Unmodified));
 	document.getElementById("phrase").removeAttribute("onclick");
 	if(reversed)
 	{
