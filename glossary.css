@@ -49,15 +49,27 @@ th
 }
 #reverse_div
 {
-	text-align: center;
+	margin-right:4vw;
+	text-align: right;
 }
 #reverse_button
 {
+	color:#dfdfdf;
 	padding: 0;
 	border: none;
 	background: none;
 	font-size: 4vw;
-	text-align: center;
+	text-align: right;
+	outline-width: 0;
+}
+#report_button
+{
+	color:#dfdfdf;
+	padding: 0;
+	border: none;
+	background: none;
+	font-size: 4vw;
+	text-align: right;
 	outline-width: 0;
 }
 #response
