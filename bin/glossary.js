@@ -17,9 +17,8 @@ function swapWordList() {
 }
 window.onload = function LoadMenu() {
     document.title = "English Plus";
-    var sheetID = "1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds";
-    //putSheetGlossaryNames(sheetID);				
-    getSheet(sheetID, function (returnAry) {
+    var sheetID = "1PSbyHpSwYwezRiUTRo6lsn4b9O13R_xPjEZ50-ehjEM";
+    Spreadsheet.getSheet(sheetID, function (returnAry) {
         sheetAry = returnAry;
         for (var i = 0; i < sheetAry.length; i++) {
             if (sheetAry[i][0]) {
@@ -39,6 +38,12 @@ window.onload = function LoadMenu() {
         }
     }
 };
+/**
+ * The callbackfunction that is called by html DOM #left_menu .navigation_item which was created with data from spreadsheets
+ * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary()
+ * @param {string} name name of the glossary to use
+ *
+ */
 function callbackSheetAry(name) {
     for (var i = 0; i < sheetAry.length; i++) {
         if (sheetAry[i][0] == name) {
@@ -50,8 +55,16 @@ function callbackSheetAry(name) {
         }
     }
 }
+/**
+ * currently not in use
+ * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary(), but it does a http request every time. It is therefore recommended to use callbackSheetAry instead
+ *
+ * @param {string} id
+ * @param {string} name
+ * @deprecated
+ */
 function CallbackSheets(id, name) {
-    getWordListFromSheet(id, name, function (ary) {
+    Spreadsheet.getWordListFromSheet(id, name, function (ary) {
         ary = JSON.parse(ary).values;
         for (var i = 0; i < ary.length; i++) {
             if (ary[i][0] == name) {
@@ -234,90 +247,101 @@ function HandleInput() {
         }
     }
 }
-function getSheet(id, callback) {
-    var xml = new XMLHttpRequest();
-    var range = "A1:Z";
-    var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/" + range + "?majorDimension=COLUMNS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
-    xml.open("GET", url, true);
-    xml.setRequestHeader("Content-type", "application/json");
-    xml.onreadystatechange = function () {
-        if (this.readyState == XMLHttpRequest.DONE) {
-            callback(JSON.parse(this.responseText).values);
-        }
-    };
-    xml.send();
-}
 /**
- * @param Spreadsheet-id to fetch word-lists from
+ * Namespace for dealing with google spreadsheets
+ * @namespace
  */
-function getSheetGlossaryNames(id, callback) {
-    var returnAry = ["test1", "test2"];
-    var xml = new XMLHttpRequest();
-    var range = "A1:Z1";
-    var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/" + range + "?majorDimension=ROWS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
-    //let url = "https://sheets.googleapis.com/v4/spreadsheets/1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds?ranges=A1%3AZ&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ"
-    xml.open("GET", url, true);
-    xml.setRequestHeader("Content-type", "application/json");
-    xml.onreadystatechange = function () {
-        if (this.readyState == XMLHttpRequest.DONE) {
-            //returnAry = JSON.parse(xml.response).values;
-            //for(let i = 0; i < returnAry.length; i++)
-            //{
-            //    if(returnAry[i].length == 0)
-            //    {
-            //        returnAry.splice(i, 1);
-            //    }
-            // }
-            // alert(returnAry)
-            callback(this.responseText);
-        }
-    };
-    xml.send();
-    return returnAry;
-}
-function putSheetGlossaryNames(id) {
-    getSheetGlossaryNames(id, function (ary) {
-        var wordNames = JSON.parse(ary).values;
-        wordNames = wordNames[0];
-        for (var i = 0; i < wordNames.length; i++) {
-            if (wordNames[i] == "") {
-                wordNames.splice(i, 1);
+var Spreadsheet;
+/**
+ * Namespace for dealing with google spreadsheets
+ * @namespace
+ */
+(function (Spreadsheet) {
+    /**
+     * Retrieve data from spreadsheet
+     *
+     * @param {string} id the id of the spreadsheet
+     * @param {function} callback Is a callback function. takes a parameter. The parameter is the values returned by the httprequest
+     * @memberOf Spreadsheet
+     */
+    function getSheet(id, callback) {
+        var xml = new XMLHttpRequest();
+        var range = "A1:Z";
+        var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/" + range + "?majorDimension=COLUMNS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
+        xml.open("GET", url, true);
+        xml.setRequestHeader("Content-type", "application/json");
+        xml.onreadystatechange = function () {
+            if (this.readyState == XMLHttpRequest.DONE) {
+                callback(JSON.parse(this.responseText).values);
             }
-        }
-        for (var i = 0; i < wordNames.length; i++) {
-            var temp = "<li class = 'navigation_item' onclick='CallbackSheets(\"" + id + "\",\"" + wordNames[i] + "\")'>" + wordNames[i] + "</li>";
-            document.getElementById("left_menu").innerHTML += temp;
-        }
-    });
-}
-/**
- * return a wordlist from a google Spreadsheet
- * @param id Spreadsheet-id
- * @param name the name of the wordlist to get
- */
-function getWordListFromSheet(id, name, callback) {
-    var returnAry;
-    var xml = new XMLHttpRequest();
-    var range = "A1:Z";
-    var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/Sheet1!" + range + "?majorDimension=COLUMNS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
-    //let url = "https://sheets.googleapis.com/v4/spreadsheets/1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds?ranges=A1%3AZ&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ"
-    xml.open("GET", url, true);
-    xml.setRequestHeader("Content-type", "application/json");
-    xml.onreadystatechange = function () {
-        if (this.readyState == XMLHttpRequest.DONE) {
-            //returnAry = JSON.parse(xml.response).values;
-            //for(let i = 0; i < returnAry.length; i++)
-            //{
-            //    if(returnAry[i].length == 0)
-            //    {
-            //        returnAry.splice(i, 1);
-            //    }
-            // }
-            // alert(returnAry)
-            callback(this.responseText);
-        }
-    };
-    xml.send();
-    return returnAry;
-}
+        };
+        xml.send();
+    }
+    Spreadsheet.getSheet = getSheet;
+    /**
+     * @param {string} id Spreadsheet-id to fetch word-lists from
+     * @deprecated
+     */
+    function getSheetGlossaryNames(id, callback) {
+        var returnAry = ["test1", "test2"];
+        var xml = new XMLHttpRequest();
+        var range = "A1:Z1";
+        var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/" + range + "?majorDimension=ROWS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
+        //let url = "https://sheets.googleapis.com/v4/spreadsheets/1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds?ranges=A1%3AZ&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ"
+        xml.open("GET", url, true);
+        xml.setRequestHeader("Content-type", "application/json");
+        xml.onreadystatechange = function () {
+            if (this.readyState == XMLHttpRequest.DONE) {
+                callback(this.responseText);
+            }
+        };
+        xml.send();
+        return returnAry;
+    }
+    Spreadsheet.getSheetGlossaryNames = getSheetGlossaryNames;
+    /**
+     *
+     *@deprecated
+    * @param {string} id
+    */
+    function putSheetGlossaryNames(id) {
+        getSheetGlossaryNames(id, function (ary) {
+            var wordNames = JSON.parse(ary).values;
+            wordNames = wordNames[0];
+            for (var i = 0; i < wordNames.length; i++) {
+                if (wordNames[i] == "") {
+                    wordNames.splice(i, 1);
+                }
+            }
+            for (var i = 0; i < wordNames.length; i++) {
+                var temp = "<li class = 'navigation_item' onclick='CallbackSheets(\"" + id + "\",\"" + wordNames[i] + "\")'>" + wordNames[i] + "</li>";
+                document.getElementById("left_menu").innerHTML += temp;
+            }
+        });
+    }
+    Spreadsheet.putSheetGlossaryNames = putSheetGlossaryNames;
+    /**
+     * return a wordlist from a google Spreadsheet
+     * @param id Spreadsheet-id
+     * @param name the name of the wordlist to get
+     * @deprecated
+     */
+    function getWordListFromSheet(id, name, callback) {
+        var returnAry;
+        var xml = new XMLHttpRequest();
+        var range = "A1:Z";
+        var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/Sheet1!" + range + "?majorDimension=COLUMNS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
+        //let url = "https://sheets.googleapis.com/v4/spreadsheets/1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds?ranges=A1%3AZ&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ"
+        xml.open("GET", url, true);
+        xml.setRequestHeader("Content-type", "application/json");
+        xml.onreadystatechange = function () {
+            if (this.readyState == XMLHttpRequest.DONE) {
+                callback(this.responseText);
+            }
+        };
+        xml.send();
+        return returnAry;
+    }
+    Spreadsheet.getWordListFromSheet = getWordListFromSheet;
+})(Spreadsheet || (Spreadsheet = {}));
 //# sourceMappingURL=glossary.js.map

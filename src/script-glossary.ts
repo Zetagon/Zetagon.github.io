@@ -22,10 +22,9 @@ function swapWordList()
 window.onload = function LoadMenu()
 {
 	document.title = "English Plus";
-	let sheetID:string = "1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds";
-	
-	//putSheetGlossaryNames(sheetID);				
-	getSheet(sheetID, function(returnAry){
+	let sheetID:string = "1PSbyHpSwYwezRiUTRo6lsn4b9O13R_xPjEZ50-ehjEM";
+				
+	Spreadsheet.getSheet(sheetID, function(returnAry:any){
 		sheetAry = returnAry;
 		for(let i = 0; i < sheetAry.length; i++){
 			if(sheetAry[i][0])
@@ -52,13 +51,19 @@ window.onload = function LoadMenu()
 		}	
 	}
 }
+/**
+ * The callbackfunction that is called by html DOM #left_menu .navigation_item which was created with data from spreadsheets
+ * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary() 
+ * @param {string} name name of the glossary to use
+ * 
+ */
 function callbackSheetAry(name:string)
 {
 	for(let i = 0; i < sheetAry.length; i++)
 	{
 		if(sheetAry[i][0] == name)
 		{
-				Wordlist_Unmodified = JSON.parse(JSON.stringify([sheetAry[i],sheetAry[i+1]]));
+			Wordlist_Unmodified = JSON.parse(JSON.stringify([sheetAry[i],sheetAry[i+1]]));
 				Wordlist_Unmodified[0].splice(0,1);//delete first row, i.e the names
 				Wordlist_Unmodified[1].splice(0,1);//delete first row, i.e the names
 				Start_Glossary();
@@ -66,9 +71,17 @@ function callbackSheetAry(name:string)
 		}
 	}
 }
+/**
+ * currently not in use
+ * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary(), but it does a http request every time. It is therefore recommended to use callbackSheetAry instead  
+ * 
+ * @param {string} id
+ * @param {string} name
+ * @deprecated
+ */
 function CallbackSheets(id:string , name:string )
 {
-	getWordListFromSheet(id, name,function(ary){
+	Spreadsheet.getWordListFromSheet(id, name,function(ary:any){
 		ary = JSON.parse(ary).values;
 		for(let i = 0; i < ary.length;i++){
 			if(ary[i][0] == name)
@@ -78,6 +91,7 @@ function CallbackSheets(id:string , name:string )
 				Wordlist_Unmodified = [ary[i], ary[i + 1]]; 
 			}
 		}
+		
 		Start_Glossary();
 	});
 }
@@ -124,12 +138,12 @@ document.getElementById("leosinput").addEventListener("keydown", function(event)
 		break;
 	}
 });
-
+interface Window {XMLHttpRequest : any; }
 function GetWordListFromServer(filename:string)
 {
 var ListLeft:Array<string> = [];
 var ListRight:Array<string> = [];
-var BothLists;
+var BothLists:Array<Array<string>>;
 var server_file_request:XMLHttpRequest;
 if(window.XMLHttpRequest)  // checking if the browser is using the old or the new system for XMLHttpRequests and adapting
 {
