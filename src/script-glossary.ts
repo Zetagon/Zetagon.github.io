@@ -1,15 +1,15 @@
-var input:string = "";
-var reversed:boolean = true;
-var output:string = "";
-var answer:string = "";
-var WordList:Array<Array<string>> = [];
-var Wordlist_Unmodified:Array<Array<string>> = [[]];
-var WordListIndex:number;
-var userClearFirstTry = true;
-var user_entered:Array<Array<string>> = [[], []];
-var correct_words:Array<string> = [];
-var playing:boolean = false;
-var firstRound:boolean = true;
+let input:string = "";
+let reversed:boolean = true;
+let output:string = "";
+let answer:string = "";
+let WordList:Array<Array<string>> = [];
+let Wordlist_Unmodified:Array<Array<string>> = [[]];
+let WordListIndex:number;
+let userClearFirstTry = true;
+let user_entered:Array<Array<string>> = [[], []];
+let correct_words:Array<string> = [];
+let playing:boolean = false;
+let firstRound:boolean = true;
 
 function swapWordList()
 {
@@ -19,10 +19,10 @@ function swapWordList()
 window.onload = function LoadMenu()
 {
 	document.title = "English Plus";
-	var ListIndex:Array<Array<string>> = GetWordListFromServer("Word_List_Index.txt");
+	let ListIndex:Array<Array<string>> = GetWordListFromServer("Word_List_Index.txt");
 	for(let i = 0; i < ListIndex[0].length; i++)
 	{
-		var teacherApproved = ListIndex[0][i].match(/\@approved/)
+		let teacherApproved = ListIndex[0][i].match(/\@approved/)
 		if(teacherApproved)
 		{
 			ListIndex[0][i] = ListIndex[0][i].replace(/\@approved/g, '')
@@ -82,10 +82,10 @@ document.getElementById("leosinput").addEventListener("keydown", function(event)
 
 function GetWordListFromServer(filename:string)
 {
-var ListLeft:Array<string> = [];
-var ListRight:Array<string> = [];
-var BothLists;
-var server_file_request:XMLHttpRequest;
+let ListLeft:Array<string> = [];
+let ListRight:Array<string> = [];
+let BothLists;
+let server_file_request:XMLHttpRequest;
 if(window.XMLHttpRequest)  // checking if the browser is using the old or the new system for XMLHttpRequests and adapting
 {
     server_file_request = new XMLHttpRequest();
@@ -98,11 +98,11 @@ server_file_request.onreadystatechange = function()  // This function will run w
 {
     if (server_file_request.readyState==4 && server_file_request.status==200)  // When this is the case the response is ready to collect
 	{
-		var wordfiletext = server_file_request.responseText;  // The file is saved to a variable in order to not rely on the XMLHttpRequest anymore
-		var wordpairs:Array<string> = wordfiletext.split(/\r\n|\r|\n/g);  // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
+		let wordfiletext = server_file_request.responseText;  // The file is saved to a variable in order to not rely on the XMLHttpRequest anymore
+		let wordpairs:Array<string> = wordfiletext.split(/\r\n|\r|\n/g);  // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
 		for (let i = 0; i < wordpairs.length; i++)  // Splitting the wordpairs into induvidual words and saving them to a left and right word-list
 		{
-			var wordpair = wordpairs[i].split("=");
+			let wordpair = wordpairs[i].split("=");
 			ListLeft[i]=wordpair[0];
 			ListRight[i]=wordpair[1];
 		}
@@ -122,7 +122,7 @@ function NewWord()
 {
 	function printScore()
 	{
-		var outputstring = "";
+		let outputstring = "";
 		if(correct_words == [])
 		{
 			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
@@ -137,17 +137,17 @@ function NewWord()
 			}
 			else
 			{
-				var percent_correct = Math.floor((100*(1 - correct_words.length/WordList_Unmodified[0].length)) + 0.5);
+				let percent_correct = Math.floor((100*(1 - correct_words.length/WordList_Unmodified[0].length)) + 0.5);
 			}
 			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
 			document.getElementById("phrase").innerHTML = "⟳";
 			document.getElementById("response").innerHTML = "<span style = 'color: red;'>" + percent_correct + "% correct!</span><br></br><span style = 'color: gray;'>Next time, see if you can get them all right!<br></br>Here are your mistakes.</span>";
 			
 			outputstring += "<tbody><tr><th>Correct answer</th><th>Your answers</th></tr>"
-			for(var i = 0; i < correct_words.length; i++)
+			for(let i = 0; i < correct_words.length; i++)
 			{
-				var user_funny_typos = "";
-				for(var j = 0; j < user_entered[i].length; j++)
+				let user_funny_typos = "";
+				for(let j = 0; j < user_entered[i].length; j++)
 				{
 					if (user_entered[i][j] != "")
 					{
@@ -161,7 +161,7 @@ function NewWord()
 						}
 					}
 				}
-				var temp = "<tr><td>" + correct_words[i] + "</td><td>" + user_funny_typos + "</td></tr>";
+				let temp = "<tr><td>" + correct_words[i] + "</td><td>" + user_funny_typos + "</td></tr>";
 				outputstring += temp;
 			}
 			outputstring += "</tbody>";
@@ -237,7 +237,7 @@ function HandleInput()
 			}
 			else
 			{
-				var exist_here = correct_words.indexOf(answer);
+				let exist_here = correct_words.indexOf(answer);
 				if(exist_here == -1)
 				{
 					correct_words.push(answer);
