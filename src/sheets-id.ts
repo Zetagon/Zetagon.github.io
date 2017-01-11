@@ -20,7 +20,15 @@ namespace Spreadsheet{
         xml.onreadystatechange= function(){
             if(this.readyState == XMLHttpRequest.DONE)
             {
-                callback(JSON.parse(this.responseText).values);
+		let returnAry = JSON.parse(this.responseText).values;
+		for(let i = 0; i < returnAry.length; i++)
+		{
+			for(let x = 0; x < returnAry[i].length; x++)
+			{
+				returnAry[i][x] = returnAry[i][x].replace("<script", "Don't put code in my code!"); 
+			}
+		}
+                callback(returnAry);
             }
         }
         xml.send()

@@ -272,7 +272,13 @@ var Spreadsheet;
         xml.setRequestHeader("Content-type", "application/json");
         xml.onreadystatechange = function () {
             if (this.readyState == XMLHttpRequest.DONE) {
-                callback(JSON.parse(this.responseText).values);
+                var returnAry = JSON.parse(this.responseText).values;
+                for (var i = 0; i < returnAry.length; i++) {
+                    for (var x = 0; x < returnAry[i].length; x++) {
+                        returnAry[i][x] = returnAry[i][x].replace("<script", "Don't put code in my code!");
+                    }
+                }
+                callback(returnAry);
             }
         };
         xml.send();
