@@ -1,10 +1,10 @@
-kvalitativ metod=några få väldetaljerade mätpunkter(vilket ämne)
+kvalitativ metod=metod för att undersöka ett ämnes karaktäristika
 substitutionsreaktion=AB + C <-> AC + B
 dubbelbindning=en atom har två bindningar med en annan atom, två överlappade elektronpar
 ester=alkohol + organisk syra. egenskaper: lukt och smak
 kiralt centrum=kolatom som har bindningar till fyra olika grupper, tillåter spegelsymetri
 rf-värde=phvärde när den titrerade substansmängden är lika stor som den otitrerade substansmängden
-kvantitativ metod=undersökning med många mätpunkter. ta reda på mängden ämne
+kvantitativ metod=metod för att ta reda på mängden av ett ämne
 kromatografi=metod för att särskilja ämnen beroende på löslighet
 alkan=kolvätekedja med enkelbindningar
 molekylformel=ett sätt att beskriva en molekyls komponenter(atomslag och antal)
