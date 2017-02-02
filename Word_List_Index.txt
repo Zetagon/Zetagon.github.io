@@ -4,3 +4,4 @@ Rethorical Devices=Rethorical_Devices.txt
 Genetik=genetik.txt
 Test Words @approved=document.txt
 Kemibegrepp=kemi-begrepp.txt
+Ekonomi-begrepp=ekonomi.txt
