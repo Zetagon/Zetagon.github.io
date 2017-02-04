@@ -1,0 +1,12 @@
+alkan=kolvätekedja med enbart enkelbindningar
+alken=kolvätekedja med en eller flera dubbelbindningar
+alkyn=kolvätekedja med en eller flera trippelbindningar
+cykloalkan=kolvätekedja med enbart enkelbindningar som är cyklyska
+aren=föreningar med bensenstruktur
+alkohol=kolvätekedja med OH-grupp
+aldehyd=organisk förening med gruppen COH
+keton=organisk förening där en kol är dubbelbunden till syre
+karboxylsyra=organisk förening med gruppen COOH
+ester=organisk förening med funktionella gruppen -COOR
+eter=organisk förening syre i mitten av kolkedjan
+amin=organisk förening med funktionella gruppen NH<sub>2</sub> 
