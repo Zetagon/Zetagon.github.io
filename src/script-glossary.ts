@@ -23,7 +23,7 @@ window.onload = function LoadMenu()
 {
 	document.title = "English Plus";
 	let sheetID:string = "1PSbyHpSwYwezRiUTRo6lsn4b9O13R_xPjEZ50-ehjEM";
-				
+
 	Spreadsheet.getSheet(sheetID, function(returnAry:any){
 		sheetAry = returnAry;
 		for(let i = 0; i < sheetAry.length; i++){
@@ -31,10 +31,10 @@ window.onload = function LoadMenu()
 			{
 				document.getElementById("left_menu").innerHTML += "<li class = 'navigation_item' onclick = 'callbackSheetAry(\"" + sheetAry[i][0] + "\")'>" + sheetAry[i][0] + "</li>"
 			}
-		}		
+		}
 	})
 
-	
+
 	var ListIndex:Array<Array<string>> = GetWordListFromServer("Word_List_Index.txt");
 	for(let i = 0; i < ListIndex[0].length; i++)
 	{
@@ -48,14 +48,14 @@ window.onload = function LoadMenu()
 		{
 
 			document.getElementById("left_menu").innerHTML += "<li class = 'navigation_item' onclick='CallbackFunction(\"" + ListIndex[1][i] + "\")'>" + ListIndex[0][i] + "</li>";
-		}	
+		}
 	}
 }
 /**
  * The callbackfunction that is called by html DOM #left_menu .navigation_item which was created with data from spreadsheets
- * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary() 
+ * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary()
  * @param {string} name name of the glossary to use
- * 
+ *
  */
 function callbackSheetAry(name:string)
 {
@@ -73,8 +73,8 @@ function callbackSheetAry(name:string)
 }
 /**
  * currently not in use
- * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary(), but it does a http request every time. It is therefore recommended to use callbackSheetAry instead  
- * 
+ * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary(), but it does a http request every time. It is therefore recommended to use callbackSheetAry instead 
+ *
  * @param {string} id
  * @param {string} name
  * @deprecated
@@ -279,6 +279,17 @@ function Start_Glossary()
 }
 
 
+function checkCorrectness(pInput, pAnswer)
+{
+    stam = pAnswer.split(/\|/g);
+    for(i:number ; i < stam.length - 1; i++)
+    {
+        if()
+        {
+            return true
+            }
+    }
+}
 function HandleInput()
 {
 	if(playing)
