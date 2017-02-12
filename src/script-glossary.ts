@@ -272,30 +272,45 @@ function Start_Glossary()
 	{
 		swapWordList()
 	}
-		
-	
+
+
 	SaveAndClearInput();
 	NewWord();
 }
 
-
-function checkCorrectness(pInput, pAnswer)
+/*
+*  @param pInput input from the user
+*  @param pInput the correct answer. | are used to indicate pluralis or singularis
+*  Ex.
+*    pAnswer = "cylinder|s"
+*    pInput = "cylinder" and pInput = "cylinders" will return true
+*
+*  if | is placed att the beginning of pAnswer then it indicates synonyms
+*  Ex.
+*     pAnswer = "|candy|sweets"
+*/
+function checkCorrectness(pInput:string , pAnswer:string )
 {
-    stam = pAnswer.split(/\|/g);
-    for(i:number ; i < stam.length - 1; i++)
+    let stam = pAnswer.split(/\|/g);
+    if(stam[0] && pInput == stam[0])
     {
-        if()
-        {
-            return true
-            }
+            return true;
     }
+    for(let i:number = 1 ; i < stam.length ; i++)
+    {
+        if(stam[0].concat(stam[i]) == pInput)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 function HandleInput()
 {
 	if(playing)
 	{
 			SaveAndClearInput();
-			if (input == answer)
+			if (checkCorrectness(input, answer))
 			{
 				document.getElementById("response").innerHTML = "<span style = 'color: blue;'>Correct!</span>"
 				if(userClearFirstTry)
@@ -313,7 +328,7 @@ function HandleInput()
 					correct_words.push(answer);
 					user_entered.push([]);
 					exist_here = (correct_words.length - 1)
-				}		
+				}
 				document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answer + "</span>";
 				user_entered[exist_here].push(input);
 				userClearFirstTry = false;

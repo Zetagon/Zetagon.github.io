@@ -212,10 +212,33 @@ function Start_Glossary() {
     SaveAndClearInput();
     NewWord();
 }
+/*
+*  @param pInput input from the user
+*  @param pInput the correct answer. | are used to indicate pluralis or singularis
+*  Ex.
+*    pAnswer = "cylinder|s"
+*    pInput = "cylinder" and pInput = "cylinders" will return true
+*
+*  if | is placed att the beginning of pAnswer then it indicates synonyms
+*  Ex.
+*     pAnswer = "|candy|sweets"
+*/
+function checkCorrectness(pInput, pAnswer) {
+    var stam = pAnswer.split(/\|/g);
+    if (stam[0] && pInput == stam[0]) {
+        return true;
+    }
+    for (var i = 1; i < stam.length; i++) {
+        if (stam[0].concat(stam[i]) == pInput) {
+            return true;
+        }
+    }
+    return false;
+}
 function HandleInput() {
     if (playing) {
         SaveAndClearInput();
-        if (input == answer) {
+        if (checkCorrectness(input, answer)) {
             document.getElementById("response").innerHTML = "<span style = 'color: blue;'>Correct!</span>";
             if (userClearFirstTry) {
                 WordList[0].splice(WordListIndex, 1);
