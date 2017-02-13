@@ -288,6 +288,8 @@ function Start_Glossary()
 *  if | is placed att the beginning of pAnswer then it indicates synonyms
 *  Ex.
 *     pAnswer = "|candy|sweets"
+*  
+*  @return type: bool. True if pInput and pAnswer matches eachother, false if not
 */
 function checkCorrectness(pInput:string , pAnswer:string )
 {
