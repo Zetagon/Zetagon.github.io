@@ -223,12 +223,15 @@ function Start_Glossary() {
 *  Ex.
 *     pAnswer = "|candy|sweets"
 */
-function checkCorrectness(pInput, pAnswer) {
+function checkCorrectness(pInput, pAnswer, pAnswerAry) {
     var stam = pAnswer.split(/\|/g);
+    pAnswerAry.length = 0; // clear so that pAnswerAry only consist of the possible answers
+    pAnswerAry.push(stam[0]);
     if (stam[0] && pInput == stam[0]) {
         return true;
     }
     for (var i = 1; i < stam.length; i++) {
+        pAnswerAry.push(stam[0].concat(stam[i]));
         if (stam[0].concat(stam[i]) == pInput) {
             return true;
         }
@@ -238,7 +241,8 @@ function checkCorrectness(pInput, pAnswer) {
 function HandleInput() {
     if (playing) {
         SaveAndClearInput();
-        if (checkCorrectness(input, answer)) {
+        var answerAry = [];
+        if (checkCorrectness(input, answer, answerAry)) {
             document.getElementById("response").innerHTML = "<span style = 'color: blue;'>Correct!</span>";
             if (userClearFirstTry) {
                 WordList[0].splice(WordListIndex, 1);
@@ -253,7 +257,12 @@ function HandleInput() {
                 user_entered.push([]);
                 exist_here = (correct_words.length - 1);
             }
-            document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answer + "</span>";
+            if (answerAry.length > 1) {
+                document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answers are: </span><span style = 'color: blue;'>" + answerAry + "</span>";
+            }
+            else {
+                document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answerAry + "</span>";
+            }
             user_entered[exist_here].push(input);
             userClearFirstTry = false;
         }
