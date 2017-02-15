@@ -1,4 +1,3 @@
-////// <reference path="sheets-id.ts" />
 var input = "";
 var reversed = true;
 var output = "";
@@ -38,31 +37,17 @@ window.onload = function LoadMenu() {
         }
     }
 };
-/**
- * The callbackfunction that is called by html DOM #left_menu .navigation_item which was created with data from spreadsheets
- * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary()
- * @param {string} name name of the glossary to use
- *
- */
 function callbackSheetAry(name) {
     for (var i = 0; i < sheetAry.length; i++) {
         if (sheetAry[i][0] == name) {
             Wordlist_Unmodified = JSON.parse(JSON.stringify([sheetAry[i], sheetAry[i + 1]]));
-            Wordlist_Unmodified[0].splice(0, 1); //delete first row, i.e the names
-            Wordlist_Unmodified[1].splice(0, 1); //delete first row, i.e the names
+            Wordlist_Unmodified[0].splice(0, 1);
+            Wordlist_Unmodified[1].splice(0, 1);
             Start_Glossary();
             return;
         }
     }
 }
-/**
- * currently not in use
- * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary(), but it does a http request every time. It is therefore recommended to use callbackSheetAry instead
- *
- * @param {string} id
- * @param {string} name
- * @deprecated
- */
 function CallbackSheets(id, name) {
     Spreadsheet.getWordListFromSheet(id, name, function (ary) {
         ary = JSON.parse(ary).values;
@@ -116,12 +101,12 @@ function GetWordListFromServer(filename) {
         server_file_request = new XMLHttpRequest();
     }
     else {
-        server_file_request = new ActiveXObject("Microsoft.XMLHTTP"); // Detta är för att skräpläsaren Internet explorer också ska fatta ;)
+        server_file_request = new ActiveXObject("Microsoft.XMLHTTP");
     }
     server_file_request.onreadystatechange = function () {
         if (server_file_request.readyState == 4 && server_file_request.status == 200) {
-            var wordfiletext = server_file_request.responseText; // The file is saved to a variable in order to not rely on the XMLHttpRequest anymore
-            var wordpairs = wordfiletext.split(/\r\n|\r|\n/g); // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
+            var wordfiletext = server_file_request.responseText;
+            var wordpairs = wordfiletext.split(/\r\n|\r|\n/g);
             for (var i = 0; i < wordpairs.length; i++) {
                 var wordpair = wordpairs[i].split("=");
                 ListLeft[i] = wordpair[0];
@@ -130,12 +115,12 @@ function GetWordListFromServer(filename) {
             BothLists = [ListLeft, ListRight];
         }
     };
-    server_file_request.open("GET", filename, false); // Preparing a GET request for the word-list-file
-    server_file_request.send(); // Sending the request
+    server_file_request.open("GET", filename, false);
+    server_file_request.send();
     return BothLists;
 }
 function getRandomArbitrary(min, max) {
-    return Math.floor(Math.random() * (max - min) + min); // värdet kan aldrig anta MAX då Math.random aldrig kan bli ett därför adderars 1
+    return Math.floor(Math.random() * (max - min) + min);
 }
 function NewWord() {
     function printScore() {
@@ -212,20 +197,9 @@ function Start_Glossary() {
     SaveAndClearInput();
     NewWord();
 }
-/*
-*  @param pInput input from the user
-*  @param pInput the correct answer. | are used to indicate pluralis or singularis
-*  Ex.
-*    pAnswer = "cylinder|s"
-*    pInput = "cylinder" and pInput = "cylinders" will return true
-*
-*  if | is placed att the beginning of pAnswer then it indicates synonyms
-*  Ex.
-*     pAnswer = "|candy|sweets"
-*/
 function checkCorrectness(pInput, pAnswer, pAnswerAry) {
     var stam = pAnswer.split(/\|/g);
-    pAnswerAry.length = 0; // clear so that pAnswerAry only consist of the possible answers
+    pAnswerAry.length = 0;
     pAnswerAry.push(stam[0]);
     if (stam[0] && pInput == stam[0]) {
         return true;
@@ -258,7 +232,10 @@ function HandleInput() {
                 exist_here = (correct_words.length - 1);
             }
             if (answerAry.length > 1) {
-                document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answers are: </span><span style = 'color: blue;'>" + answerAry + "</span>";
+                if (!answerAry[0]) {
+                    answerAry.shift();
+                }
+                document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answers are either: </span><span style = 'color: blue;'>" + answerAry + "</span>";
             }
             else {
                 document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answer is: </span><span style = 'color: blue;'>" + answerAry + "</span>";
@@ -279,23 +256,8 @@ function HandleInput() {
         }
     }
 }
-/**
- * Namespace for dealing with google spreadsheets
- * @namespace
- */
 var Spreadsheet;
-/**
- * Namespace for dealing with google spreadsheets
- * @namespace
- */
 (function (Spreadsheet) {
-    /**
-     * Retrieve data from spreadsheet
-     *
-     * @param {string} id the id of the spreadsheet
-     * @param {function} callback Is a callback function. takes a parameter. The parameter is the values returned by the httprequest
-     * @memberOf Spreadsheet
-     */
     function getSheet(id, callback) {
         var xml = new XMLHttpRequest();
         var range = "A1:Z";
@@ -316,16 +278,11 @@ var Spreadsheet;
         xml.send();
     }
     Spreadsheet.getSheet = getSheet;
-    /**
-     * @param {string} id Spreadsheet-id to fetch word-lists from
-     * @deprecated
-     */
     function getSheetGlossaryNames(id, callback) {
         var returnAry = ["test1", "test2"];
         var xml = new XMLHttpRequest();
         var range = "A1:Z1";
         var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/" + range + "?majorDimension=ROWS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
-        //let url = "https://sheets.googleapis.com/v4/spreadsheets/1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds?ranges=A1%3AZ&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ"
         xml.open("GET", url, true);
         xml.setRequestHeader("Content-type", "application/json");
         xml.onreadystatechange = function () {
@@ -337,11 +294,6 @@ var Spreadsheet;
         return returnAry;
     }
     Spreadsheet.getSheetGlossaryNames = getSheetGlossaryNames;
-    /**
-     *
-     *@deprecated
-    * @param {string} id
-    */
     function putSheetGlossaryNames(id) {
         getSheetGlossaryNames(id, function (ary) {
             var wordNames = JSON.parse(ary).values;
@@ -358,18 +310,11 @@ var Spreadsheet;
         });
     }
     Spreadsheet.putSheetGlossaryNames = putSheetGlossaryNames;
-    /**
-     * return a wordlist from a google Spreadsheet
-     * @param id Spreadsheet-id
-     * @param name the name of the wordlist to get
-     * @deprecated
-     */
     function getWordListFromSheet(id, name, callback) {
         var returnAry;
         var xml = new XMLHttpRequest();
         var range = "A1:Z";
         var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/Sheet1!" + range + "?majorDimension=COLUMNS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
-        //let url = "https://sheets.googleapis.com/v4/spreadsheets/1IJ9_VHEtmQlKoVnT93Y7Dz-uyWShaOH9N2LqFGgHbds?ranges=A1%3AZ&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ"
         xml.open("GET", url, true);
         xml.setRequestHeader("Content-type", "application/json");
         xml.onreadystatechange = function () {

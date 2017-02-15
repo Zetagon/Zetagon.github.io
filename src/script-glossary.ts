@@ -337,7 +337,11 @@ function HandleInput()
 				}
           if(answerAry.length > 1)
           {
-            document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answers are: </span><span style = 'color: blue;'>" + answerAry + "</span>";
+              if(!answerAry[0])
+              {
+                  answerAry.shift();
+              }
+            document.getElementById("response").innerHTML = "<span style = 'color: red;'>Incorrect!</span><br></br><span style = 'color: gray;'>The correct answers are either: </span><span style = 'color: blue;'>" + answerAry + "</span>";
           }
           else
           {
