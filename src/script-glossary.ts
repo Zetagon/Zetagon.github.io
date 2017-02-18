@@ -21,13 +21,32 @@ class AnswerDescriptionPair
     description:string = "";
     linkToPictue:string = "";
 
+	test:Array<Array<string>>  = [];
+	
     constructor(rawString:string)
     {
-        let x = rawString.split("&");
+        let answerDescription =  rawString.split("=");
+		let x = answerDescription[0].split("&");
         for(let i:number = 0; i < x.length; i++)
         {
 			this.synonyms.push(x[i].split("|"));
         }
+		let y:any = answerDescription[1];
+		//kod för att fixa bilder /\(([^)]+)\)/
+		let imageMatches = y.split(/\(([^)]+)\)/);
+        y = y.split(/\(([^)]+)\)/);
+		for(let i = 0; i < imageMatches.length ; i++)
+		{
+			this.test.push([]);
+			this.test[i].push(y[i]);
+			this.test[i].push(imageMatches[i]);
+		}
+        // tar hand om fallet: text1[bild1.png]text2
+		if(y.length > imageMatches.length)
+		{
+			this.test[imageMatches.length].push(y[y.length - 1]);
+			this.test[imageMatches.length].push("");
+		}
     }
     
     checkMatch(pInput:string)
