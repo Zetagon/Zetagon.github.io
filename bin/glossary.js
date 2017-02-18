@@ -11,10 +11,40 @@ var correct_words = [];
 var playing = false;
 var firstRound = true;
 var sheetAry;
+var AnswerDescriptionPair = (function () {
+    function AnswerDescriptionPair(rawString) {
+        this.type = "";
+        this.synonyms = [];
+        this.description = "";
+        this.linkToPictue = "";
+        var x = rawString.split("&");
+        for (var i = 0; i < x.length; i++) {
+            this.synonyms.push(x[i].split("|"));
+        }
+    }
+    AnswerDescriptionPair.prototype.checkMatch = function (pInput) {
+        for (var x = 0; x < this.synonyms.length; x++) {
+            for (var y = 0; y < this.synonyms[x].length; y++) {
+                if (pInput == this.synonyms[x][y]) {
+                    alert("true");
+                    return true;
+                }
+            }
+        }
+        alert("false");
+        return false;
+    };
+    return AnswerDescriptionPair;
+}());
 function swapWordList() {
     WordList.reverse();
 }
 window.onload = function LoadMenu() {
+    var leosTemp = new AnswerDescriptionPair("syn1|synonym1&syn2|synonym2");
+    leosTemp.checkMatch("");
+    leosTemp.checkMatch("hej");
+    leosTemp.checkMatch("syn1");
+    leosTemp.checkMatch("synonym2");
     document.title = "English Plus";
     var sheetID = "1PSbyHpSwYwezRiUTRo6lsn4b9O13R_xPjEZ50-ehjEM";
     Spreadsheet.getSheet(sheetID, function (returnAry) {

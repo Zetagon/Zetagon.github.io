@@ -14,6 +14,41 @@ var playing:boolean = false;
 var firstRound:boolean = true;
 let sheetAry:Array<Array<string>>
 
+class AnswerDescriptionPair
+{
+    type:string = "";
+	synonyms:Array<Array<string>> = []; //The subarray are the alternatives
+    description:string = "";
+    linkToPictue:string = "";
+
+    constructor(rawString:string)
+    {
+        let x = rawString.split("&");
+        for(let i:number = 0; i < x.length; i++)
+        {
+			this.synonyms.push(x[i].split("|"));
+        }
+    }
+    
+    checkMatch(pInput:string)
+    {
+        for(let x:number = 0; x < this.synonyms.length ; x++)
+        {
+            for(let y:number = 0; y < this.synonyms[x].length ; y++)
+            {
+                if(pInput == this.synonyms[x][y])
+				{
+                    alert("true");
+                    return true;
+				}
+            }
+        }
+		alert("false");
+		return false;
+    }
+	
+}
+
 function swapWordList()
 {
 	WordList.reverse()
@@ -21,6 +56,11 @@ function swapWordList()
 
 window.onload = function LoadMenu()
 {
+	let leosTemp = new AnswerDescriptionPair("syn1|synonym1&syn2|synonym2");
+    leosTemp.checkMatch("");
+    leosTemp.checkMatch("hej");
+    leosTemp.checkMatch("syn1");
+    leosTemp.checkMatch("synonym2");
 	document.title = "English Plus";
 	let sheetID:string = "1PSbyHpSwYwezRiUTRo6lsn4b9O13R_xPjEZ50-ehjEM";
 
