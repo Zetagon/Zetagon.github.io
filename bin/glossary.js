@@ -15,11 +15,32 @@ var AnswerDescriptionPair = (function () {
     function AnswerDescriptionPair(rawString) {
         this.type = "";
         this.synonyms = [];
-        this.description = "";
-        this.linkToPictue = "";
-        var x = rawString.split("&");
-        for (var i = 0; i < x.length; i++) {
-            this.synonyms.push(x[i].split("|"));
+        this.descriptionImagePairs = [];
+        var answerDescription = rawString.split("=");
+        var answers = answerDescription[0].split("&");
+        for (var i = 0; i < answers.length; i++) {
+            var x = answers[i].split("|");
+            for (var a = 0; a < x.length; a++) {
+                x[a].trim();
+            }
+            this.synonyms.push();
+        }
+        var y = answerDescription[1];
+        var imageMatches = y.match(/\[([^\]]+)\]/g);
+        for (var i = 0; i < imageMatches.length; i++) {
+            imageMatches[i] = imageMatches[i].slice(1);
+            imageMatches[i] = imageMatches[i].slice(0, -1);
+        }
+        var descriptionMatches = y.replace(/\[([^\]]+)\]/g, '|').split('|');
+        descriptionMatches.pop();
+        this.descriptionImagePairs = [[]];
+        this.descriptionImagePairs[0] = descriptionMatches;
+        this.descriptionImagePairs[1] = imageMatches;
+        for (var hej = 0; hej < this.synonyms.length; hej++) {
+            alert(this.synonyms[hej]);
+        }
+        for (var hej = 0; hej < this.descriptionImagePairs.length; hej++) {
+            alert(this.descriptionImagePairs[hej]);
         }
     }
     AnswerDescriptionPair.prototype.checkMatch = function (pInput) {
@@ -40,11 +61,7 @@ function swapWordList() {
     WordList.reverse();
 }
 window.onload = function LoadMenu() {
-    var leosTemp = new AnswerDescriptionPair("syn1|synonym1&syn2|synonym2");
-    leosTemp.checkMatch("");
-    leosTemp.checkMatch("hej");
-    leosTemp.checkMatch("syn1");
-    leosTemp.checkMatch("synonym2");
+    var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]");
     document.title = "English Plus";
     var sheetID = "1PSbyHpSwYwezRiUTRo6lsn4b9O13R_xPjEZ50-ehjEM";
     Spreadsheet.getSheet(sheetID, function (returnAry) {

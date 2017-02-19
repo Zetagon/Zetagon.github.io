@@ -18,34 +18,51 @@ class AnswerDescriptionPair
 {
     type:string = "";
 	synonyms:Array<Array<string>> = []; //The subarray are the alternatives
-    description:string = "";
-    linkToPictue:string = "";
+	descriptionImagePairs:Array<Array<string>>  = [];//descriptionImagePairs[0] is the description in textform, and descriptionImagePairs[1] is the accompanying image-link
 
-	test:Array<Array<string>>  = [];
-	
+    /*
+    * @param rawstring Raw-formatted answerDescriptionpair on the form:"synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 = bild1 [bild1.png] bild2 [bild2.png]"
+    *
+    */
     constructor(rawString:string)
     {
         let answerDescription =  rawString.split("=");
-		let x = answerDescription[0].split("&");
-        for(let i:number = 0; i < x.length; i++)
+		let answers = answerDescription[0].split("&");
+        for(let i:number = 0; i < answers.length; i++)
         {
-			this.synonyms.push(x[i].split("|"));
+            let x = answers[i].split("|");
+            for(let a = 0 ; a < x.length; a ++)
+            {
+                x[a].trim();
+            }
+			this.synonyms.push();
         }
 		let y:any = answerDescription[1];
-		//kod för att fixa bilder /\(([^)]+)\)/
-		let imageMatches = y.split(/\(([^)]+)\)/);
-        y = y.split(/\(([^)]+)\)/);
-		for(let i = 0; i < imageMatches.length ; i++)
+		let imageMatches = y.match(/\[([^\]]+)\]/g);//get image-links ( [image.png] )
+
+        //remove the surrounding square-parentheses
+        for(let i = 0; i < imageMatches.length ; i++)
+        {
+            imageMatches[i] = imageMatches[i].slice(1);
+            imageMatches[i] = imageMatches[i].slice(0,-1)
+        }
+
+        //remove the image-links( [image.png] )
+        let descriptionMatches = y.replace(/\[([^\]]+)\]/g, '|').split('|');
+        descriptionMatches.pop();
+
+        //fill in the images and descriptions
+        this.descriptionImagePairs = [[]];
+        this.descriptionImagePairs[0] = descriptionMatches;
+        this.descriptionImagePairs[1] = imageMatches;
+        //testing
+		for(let hej = 0; hej < this.synonyms.length ; hej++)
 		{
-			this.test.push([]);
-			this.test[i].push(y[i]);
-			this.test[i].push(imageMatches[i]);
+			alert(this.synonyms[hej]);
 		}
-        // tar hand om fallet: text1[bild1.png]text2
-		if(y.length > imageMatches.length)
+		for(let hej = 0; hej < this.descriptionImagePairs.length ; hej++)
 		{
-			this.test[imageMatches.length].push(y[y.length - 1]);
-			this.test[imageMatches.length].push("");
+			alert(this.descriptionImagePairs[hej]);
 		}
     }
     
@@ -75,11 +92,8 @@ function swapWordList()
 
 window.onload = function LoadMenu()
 {
-	let leosTemp = new AnswerDescriptionPair("syn1|synonym1&syn2|synonym2");
-    leosTemp.checkMatch("");
-    leosTemp.checkMatch("hej");
-    leosTemp.checkMatch("syn1");
-    leosTemp.checkMatch("synonym2");
+	let leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]");
+    
 	document.title = "English Plus";
 	let sheetID:string = "1PSbyHpSwYwezRiUTRo6lsn4b9O13R_xPjEZ50-ehjEM";
 
