@@ -21,9 +21,9 @@ var AnswerDescriptionPair = (function () {
         for (var i = 0; i < answers.length; i++) {
             var x = answers[i].split("|");
             for (var a = 0; a < x.length; a++) {
-                x[a].trim();
+                x[a] = x[a].trim();
             }
-            this.synonyms.push();
+            this.synonyms.push(x);
         }
         var y = answerDescription[1];
         var imageMatches = y.match(/\[([^\]]+)\]/g);
@@ -37,22 +37,18 @@ var AnswerDescriptionPair = (function () {
         this.descriptionImagePairs[0] = descriptionMatches;
         this.descriptionImagePairs[1] = imageMatches;
         for (var hej = 0; hej < this.synonyms.length; hej++) {
-            alert(this.synonyms[hej]);
         }
         for (var hej = 0; hej < this.descriptionImagePairs.length; hej++) {
-            alert(this.descriptionImagePairs[hej]);
         }
     }
     AnswerDescriptionPair.prototype.checkMatch = function (pInput) {
         for (var x = 0; x < this.synonyms.length; x++) {
             for (var y = 0; y < this.synonyms[x].length; y++) {
                 if (pInput == this.synonyms[x][y]) {
-                    alert("true");
                     return true;
                 }
             }
         }
-        alert("false");
         return false;
     };
     return AnswerDescriptionPair;

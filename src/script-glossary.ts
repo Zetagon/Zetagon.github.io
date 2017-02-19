@@ -33,9 +33,9 @@ class AnswerDescriptionPair
             let x = answers[i].split("|");
             for(let a = 0 ; a < x.length; a ++)
             {
-                x[a].trim();
+                x[a] = x[a].trim();
             }
-			this.synonyms.push();
+			this.synonyms.push(x);
         }
 		let y:any = answerDescription[1];
 		let imageMatches = y.match(/\[([^\]]+)\]/g);//get image-links ( [image.png] )
@@ -58,11 +58,11 @@ class AnswerDescriptionPair
         //testing
 		for(let hej = 0; hej < this.synonyms.length ; hej++)
 		{
-			alert(this.synonyms[hej]);
+			//alert(this.synonyms[hej]);
 		}
 		for(let hej = 0; hej < this.descriptionImagePairs.length ; hej++)
 		{
-			alert(this.descriptionImagePairs[hej]);
+			//alert(this.descriptionImagePairs[hej]);
 		}
     }
     
@@ -74,15 +74,15 @@ class AnswerDescriptionPair
             {
                 if(pInput == this.synonyms[x][y])
 				{
-                    alert("true");
+                    //alert("true");
                     return true;
 				}
             }
         }
-		alert("false");
+		//alert("false");
 		return false;
     }
-	
+
 }
 
 function swapWordList()
