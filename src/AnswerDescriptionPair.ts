@@ -45,15 +45,6 @@ class AnswerDescriptionPair
         this.descriptionImagePairs = [[]];
         this.descriptionImagePairs[0] = descriptionMatches;
         this.descriptionImagePairs[1] = imageMatches;
-        //testing
-		for(let hej = 0; hej < this.synonyms.length ; hej++)
-		{
-			//alert(this.synonyms[hej]);
-		}
-		for(let hej = 0; hej < this.descriptionImagePairs.length ; hej++)
-		{
-			//alert(this.descriptionImagePairs[hej]);
-		}
     }
     /*
     * @param pInput input from the user
@@ -70,14 +61,10 @@ class AnswerDescriptionPair
             {
                 if(pInput == this.synonyms[x][y])
 				{
-                    //alert("true");
-                    //this.cleared_synonyms.push(this.synonyms.splice(x,1)[0]);
-                    //return true;
-                    return x;
+                        return x;
 				}
             }
         }
-		//alert("false");
 		return -1;
     }
 

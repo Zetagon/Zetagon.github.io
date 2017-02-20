@@ -99,10 +99,6 @@ var AnswerDescriptionPair = (function () {
         this.descriptionImagePairs = [[]];
         this.descriptionImagePairs[0] = descriptionMatches;
         this.descriptionImagePairs[1] = imageMatches;
-        for (var hej = 0; hej < this.synonyms.length; hej++) {
-        }
-        for (var hej = 0; hej < this.descriptionImagePairs.length; hej++) {
-        }
     }
     AnswerDescriptionPair.prototype.checkMatch = function (pInput) {
         for (var x = 0; x < this.synonyms.length; x++) {
