@@ -45,11 +45,16 @@ class AnswerDescriptionPair
         {
             imageMatches[i] = imageMatches[i].slice(1);
             imageMatches[i] = imageMatches[i].slice(0,-1)
+            imageMatches[i] = imageMatches[i].trim();
         }
 
         //remove the image-links( [image.png] )
         let descriptionMatches = y.replace(/\[([^\]]+)\]/g, '|').split('|');
         descriptionMatches.pop();
+        for(let i = 0; i < descriptionMatches.length; i++)
+        {
+            descriptionMatches[i] = descriptionMatches[i].trim();
+        }
 
         //fill in the images and descriptions
         this.descriptionImagePairs = [[]];
@@ -65,7 +70,7 @@ class AnswerDescriptionPair
 			//alert(this.descriptionImagePairs[hej]);
 		}
     }
-    
+ 
     checkMatch(pInput:string)
     {
         for(let x:number = 0; x < this.synonyms.length ; x++)
