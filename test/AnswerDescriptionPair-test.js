@@ -24,10 +24,17 @@ buster.testCase("Class AnswerDescriptionPair", {
 
     "passed input test":function(){
 	    var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]");
-        assert(leosTemp.checkMatch("synonym1"));
-        assert(leosTemp.checkMatch("syno2"));
-        refute(leosTemp.checkMatch("Synonym1"));
-        assert(leosTemp.checkMatch("synonym3"));
-        assert(leosTemp.checkMatch("synonymer1"));
-    },
+        assert(leosTemp.checkMatchAndSplice("synonym1"));
+        refute(leosTemp.checkMatchAndSplice("synonym1"));
+
+        assert(leosTemp.checkMatchAndSplice("syno2"));
+        refute(leosTemp.checkMatchAndSplice("syno2"));
+
+        refute(leosTemp.checkMatchAndSplice("Synonym1"));
+
+        assert(leosTemp.checkMatchAndSplice("synonym3"));
+        refute(leosTemp.checkMatchAndSplice("synonym3"));
+
+        refute(leosTemp.checkMatchAndSplice("synonymer1"));
+    }
 });

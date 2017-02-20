@@ -1,20 +1,79 @@
-var input = "";
-var reversed = true;
-var output = "";
-var answer = "";
-var WordList = [];
-var Wordlist_Unmodified = [[]];
-var WordListIndex;
-var userClearFirstTry = true;
-var user_entered = [[], []];
-var correct_words = [];
-var playing = false;
-var firstRound = true;
-var sheetAry;
+var Spreadsheet;
+(function (Spreadsheet) {
+    function getSheet(id, callback) {
+        var xml = new XMLHttpRequest();
+        var range = "A1:Z";
+        var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/" + range + "?majorDimension=COLUMNS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
+        xml.open("GET", url, true);
+        xml.setRequestHeader("Content-type", "application/json");
+        xml.onreadystatechange = function () {
+            if (this.readyState == XMLHttpRequest.DONE) {
+                var returnAry = JSON.parse(this.responseText).values;
+                for (var i = 0; i < returnAry.length; i++) {
+                    for (var x = 0; x < returnAry[i].length; x++) {
+                        returnAry[i][x] = returnAry[i][x].replace("<script", "Don't put code in my code!");
+                    }
+                }
+                callback(returnAry);
+            }
+        };
+        xml.send();
+    }
+    Spreadsheet.getSheet = getSheet;
+    function getSheetGlossaryNames(id, callback) {
+        var returnAry = ["test1", "test2"];
+        var xml = new XMLHttpRequest();
+        var range = "A1:Z1";
+        var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/" + range + "?majorDimension=ROWS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
+        xml.open("GET", url, true);
+        xml.setRequestHeader("Content-type", "application/json");
+        xml.onreadystatechange = function () {
+            if (this.readyState == XMLHttpRequest.DONE) {
+                callback(this.responseText);
+            }
+        };
+        xml.send();
+        return returnAry;
+    }
+    Spreadsheet.getSheetGlossaryNames = getSheetGlossaryNames;
+    function putSheetGlossaryNames(id) {
+        getSheetGlossaryNames(id, function (ary) {
+            var wordNames = JSON.parse(ary).values;
+            wordNames = wordNames[0];
+            for (var i = 0; i < wordNames.length; i++) {
+                if (wordNames[i] == "") {
+                    wordNames.splice(i, 1);
+                }
+            }
+            for (var i = 0; i < wordNames.length; i++) {
+                var temp = "<li class = 'navigation_item' onclick='CallbackSheets(\"" + id + "\",\"" + wordNames[i] + "\")'>" + wordNames[i] + "</li>";
+                document.getElementById("left_menu").innerHTML += temp;
+            }
+        });
+    }
+    Spreadsheet.putSheetGlossaryNames = putSheetGlossaryNames;
+    function getWordListFromSheet(id, name, callback) {
+        var returnAry;
+        var xml = new XMLHttpRequest();
+        var range = "A1:Z";
+        var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/Sheet1!" + range + "?majorDimension=COLUMNS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
+        xml.open("GET", url, true);
+        xml.setRequestHeader("Content-type", "application/json");
+        xml.onreadystatechange = function () {
+            if (this.readyState == XMLHttpRequest.DONE) {
+                callback(this.responseText);
+            }
+        };
+        xml.send();
+        return returnAry;
+    }
+    Spreadsheet.getWordListFromSheet = getWordListFromSheet;
+})(Spreadsheet || (Spreadsheet = {}));
 var AnswerDescriptionPair = (function () {
     function AnswerDescriptionPair(rawString) {
         this.type = "";
         this.synonyms = [];
+        this.cleared_synonyms = [];
         this.descriptionImagePairs = [];
         var answerDescription = rawString.split("=");
         var answers = answerDescription[0].split("&");
@@ -49,14 +108,35 @@ var AnswerDescriptionPair = (function () {
         for (var x = 0; x < this.synonyms.length; x++) {
             for (var y = 0; y < this.synonyms[x].length; y++) {
                 if (pInput == this.synonyms[x][y]) {
-                    return true;
+                    return x;
                 }
             }
+        }
+        return -1;
+    };
+    AnswerDescriptionPair.prototype.checkMatchAndSplice = function (pInput) {
+        var x = this.checkMatch(pInput);
+        if (x != -1) {
+            this.cleared_synonyms.push(this.synonyms.splice(x, 1)[0]);
+            return true;
         }
         return false;
     };
     return AnswerDescriptionPair;
 }());
+var input = "";
+var reversed = true;
+var output = "";
+var answer = "";
+var WordList = [];
+var Wordlist_Unmodified = [[]];
+var WordListIndex;
+var userClearFirstTry = true;
+var user_entered = [[], []];
+var correct_words = [];
+var playing = false;
+var firstRound = true;
+var sheetAry;
 function swapWordList() {
     WordList.reverse();
 }
@@ -303,75 +383,4 @@ function HandleInput() {
         }
     }
 }
-var Spreadsheet;
-(function (Spreadsheet) {
-    function getSheet(id, callback) {
-        var xml = new XMLHttpRequest();
-        var range = "A1:Z";
-        var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/" + range + "?majorDimension=COLUMNS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
-        xml.open("GET", url, true);
-        xml.setRequestHeader("Content-type", "application/json");
-        xml.onreadystatechange = function () {
-            if (this.readyState == XMLHttpRequest.DONE) {
-                var returnAry = JSON.parse(this.responseText).values;
-                for (var i = 0; i < returnAry.length; i++) {
-                    for (var x = 0; x < returnAry[i].length; x++) {
-                        returnAry[i][x] = returnAry[i][x].replace("<script", "Don't put code in my code!");
-                    }
-                }
-                callback(returnAry);
-            }
-        };
-        xml.send();
-    }
-    Spreadsheet.getSheet = getSheet;
-    function getSheetGlossaryNames(id, callback) {
-        var returnAry = ["test1", "test2"];
-        var xml = new XMLHttpRequest();
-        var range = "A1:Z1";
-        var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/" + range + "?majorDimension=ROWS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
-        xml.open("GET", url, true);
-        xml.setRequestHeader("Content-type", "application/json");
-        xml.onreadystatechange = function () {
-            if (this.readyState == XMLHttpRequest.DONE) {
-                callback(this.responseText);
-            }
-        };
-        xml.send();
-        return returnAry;
-    }
-    Spreadsheet.getSheetGlossaryNames = getSheetGlossaryNames;
-    function putSheetGlossaryNames(id) {
-        getSheetGlossaryNames(id, function (ary) {
-            var wordNames = JSON.parse(ary).values;
-            wordNames = wordNames[0];
-            for (var i = 0; i < wordNames.length; i++) {
-                if (wordNames[i] == "") {
-                    wordNames.splice(i, 1);
-                }
-            }
-            for (var i = 0; i < wordNames.length; i++) {
-                var temp = "<li class = 'navigation_item' onclick='CallbackSheets(\"" + id + "\",\"" + wordNames[i] + "\")'>" + wordNames[i] + "</li>";
-                document.getElementById("left_menu").innerHTML += temp;
-            }
-        });
-    }
-    Spreadsheet.putSheetGlossaryNames = putSheetGlossaryNames;
-    function getWordListFromSheet(id, name, callback) {
-        var returnAry;
-        var xml = new XMLHttpRequest();
-        var range = "A1:Z";
-        var url = "https://sheets.googleapis.com/v4/spreadsheets/" + id + "/values/Sheet1!" + range + "?majorDimension=COLUMNS&key=AIzaSyDgNYnXmkRA6ctBDYfiwXdB3lXcwz9rEHQ";
-        xml.open("GET", url, true);
-        xml.setRequestHeader("Content-type", "application/json");
-        xml.onreadystatechange = function () {
-            if (this.readyState == XMLHttpRequest.DONE) {
-                callback(this.responseText);
-            }
-        };
-        xml.send();
-        return returnAry;
-    }
-    Spreadsheet.getWordListFromSheet = getWordListFromSheet;
-})(Spreadsheet || (Spreadsheet = {}));
 //# sourceMappingURL=glossary.js.map

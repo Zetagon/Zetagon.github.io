@@ -1,5 +1,5 @@
-////// <reference path="sheets-id.ts" />
-
+/// <reference path="sheets-id.ts" />
+/// <reference path="AnswerDescriptionPair.ts" />
 var input:string = "";
 var reversed:boolean = true;
 var output:string = "";
@@ -14,81 +14,7 @@ var playing:boolean = false;
 var firstRound:boolean = true;
 let sheetAry:Array<Array<string>>
 
-class AnswerDescriptionPair
-{
-    type:string = "";
-	synonyms:Array<Array<string>> = []; //The subarray are the alternatives
-	descriptionImagePairs:Array<Array<string>>  = [];//descriptionImagePairs[0] is the description in textform, and descriptionImagePairs[1] is the accompanying image-link
 
-    /*
-    * @param rawstring Raw-formatted answerDescriptionpair on the form:"synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 = bild1 [bild1.png] bild2 [bild2.png]"
-    *
-    */
-    constructor(rawString:string)
-    {
-        let answerDescription =  rawString.split("=");
-		let answers = answerDescription[0].split("&");
-        for(let i:number = 0; i < answers.length; i++)
-        {
-            let x = answers[i].split("|");
-            for(let a = 0 ; a < x.length; a ++)
-            {
-                x[a] = x[a].trim();
-            }
-			this.synonyms.push(x);
-        }
-		let y:any = answerDescription[1];
-		let imageMatches = y.match(/\[([^\]]+)\]/g);//get image-links ( [image.png] )
-
-        //remove the surrounding square-parentheses
-        for(let i = 0; i < imageMatches.length ; i++)
-        {
-            imageMatches[i] = imageMatches[i].slice(1);
-            imageMatches[i] = imageMatches[i].slice(0,-1)
-            imageMatches[i] = imageMatches[i].trim();
-        }
-
-        //remove the image-links( [image.png] )
-        let descriptionMatches = y.replace(/\[([^\]]+)\]/g, '|').split('|');
-        descriptionMatches.pop();
-        for(let i = 0; i < descriptionMatches.length; i++)
-        {
-            descriptionMatches[i] = descriptionMatches[i].trim();
-        }
-
-        //fill in the images and descriptions
-        this.descriptionImagePairs = [[]];
-        this.descriptionImagePairs[0] = descriptionMatches;
-        this.descriptionImagePairs[1] = imageMatches;
-        //testing
-		for(let hej = 0; hej < this.synonyms.length ; hej++)
-		{
-			//alert(this.synonyms[hej]);
-		}
-		for(let hej = 0; hej < this.descriptionImagePairs.length ; hej++)
-		{
-			//alert(this.descriptionImagePairs[hej]);
-		}
-    }
- 
-    checkMatch(pInput:string)
-    {
-        for(let x:number = 0; x < this.synonyms.length ; x++)
-        {
-            for(let y:number = 0; y < this.synonyms[x].length ; y++)
-            {
-                if(pInput == this.synonyms[x][y])
-				{
-                    //alert("true");
-                    return true;
-				}
-            }
-        }
-		//alert("false");
-		return false;
-    }
-
-}
 
 function swapWordList()
 {
@@ -98,7 +24,7 @@ function swapWordList()
 window.onload = function LoadMenu()
 {
 	let leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]");
-    
+
 	document.title = "English Plus";
 	let sheetID:string = "1PSbyHpSwYwezRiUTRo6lsn4b9O13R_xPjEZ50-ehjEM";
 
@@ -169,7 +95,7 @@ function CallbackSheets(id:string , name:string )
 				Wordlist_Unmodified = [ary[i], ary[i + 1]]; 
 			}
 		}
-		
+
 		Start_Glossary();
 	});
 }
@@ -279,7 +205,7 @@ function NewWord()
 			document.getElementById("phrase").setAttribute("onclick", "Start_Glossary()");
 			document.getElementById("phrase").innerHTML = "⟳";
 			document.getElementById("response").innerHTML = "<span style = 'color: red;'>" + percent_correct + "% correct!</span><br></br><span style = 'color: gray;'>Next time, see if you can get them all right!<br></br>Here are your mistakes.</span>";
-			
+
 			outputstring += "<tbody><tr><th>Correct answer</th><th>Your answers</th></tr>"
 			for(var i = 0; i < correct_words.length; i++)
 			{
@@ -302,7 +228,7 @@ function NewWord()
 				outputstring += temp;
 			}
 			outputstring += "</tbody>";
-			document.getElementById("table_of_wrongs").innerHTML = outputstring;	
+			document.getElementById("table_of_wrongs").innerHTML = outputstring;
 		}
 
 	}
@@ -366,7 +292,7 @@ function Start_Glossary()
 *  if | is placed att the beginning of pAnswer then it indicates synonyms
 *  Ex.
 *     pAnswer = "|candy|sweets"
-*  
+*
 *  @return type: bool. True if pInput and pAnswer matches eachother, false if not
 */
 function checkCorrectness(pInput:string , pAnswer:string , pAnswerAry:Array<string>)
