@@ -1,15 +1,21 @@
+interface questionAnswerPair
+{
+    questionType:string;
+    checkMatch(pInput:string):boolean;
+    checkMatchAndSplice(pInput:string):number;
+}
+
 class AnswerDescriptionPair
 {
-    type:string = "";
-	synonyms:Array<Array<string>> = []; //The subarray are the alternatives
-    cleared_synonyms:Array<Array<string>> = [];// the words that the user has cleared
-	descriptionImagePairs:Array<Array<string>>  = [];//descriptionImagePairs[0] is the description in textform, and descriptionImagePairs[1] is the accompanying image-link
+    private	synonyms:Array<Array<string>> = []; //The subarray are the alternatives
+    private cleared_synonyms:Array<Array<string>> = [];// the words that the user has cleared
+	private descriptionImagePairs:Array<Array<string>>  = [];//descriptionImagePairs[0] is the description in textform, and descriptionImagePairs[1] is the accompanying image-link
 
     /*
     * @param rawstring Raw-formatted answerDescriptionpair on the form:"synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 = bild1 [bild1.png] bild2 [bild2.png]"
     *
     */
-    constructor(rawString:string)
+    constructor(rawString:string, public questionType:string)
     {
         let answerDescription =  rawString.split("=");
 		let answers = answerDescription[0].split("&");

@@ -24,7 +24,7 @@ buster.testCase("Class AnswerDescriptionPair", {
 
     "passed input test":function(){
 	    var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]");
-        assert(leosTemp.checkMatchAndSplice("synonym1"));
+        assert(leosTemp.checkMatchAndSplice("synonym1"));;
         refute(leosTemp.checkMatchAndSplice("synonym1"));
 
         assert(leosTemp.checkMatchAndSplice("syno2"));
@@ -36,5 +36,11 @@ buster.testCase("Class AnswerDescriptionPair", {
         refute(leosTemp.checkMatchAndSplice("synonym3"));
 
         refute(leosTemp.checkMatchAndSplice("synonymer1"));
+    },
+
+
+    "passed questionType test":function(){
+	    var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]", "glossary");
+        assert(leosTemp.questionType);
     }
 });

@@ -70,8 +70,8 @@ var Spreadsheet;
     Spreadsheet.getWordListFromSheet = getWordListFromSheet;
 })(Spreadsheet || (Spreadsheet = {}));
 var AnswerDescriptionPair = (function () {
-    function AnswerDescriptionPair(rawString) {
-        this.type = "";
+    function AnswerDescriptionPair(rawString, questionType) {
+        this.questionType = questionType;
         this.synonyms = [];
         this.cleared_synonyms = [];
         this.descriptionImagePairs = [];
