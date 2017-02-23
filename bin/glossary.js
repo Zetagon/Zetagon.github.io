@@ -1,3 +1,88 @@
+String.prototype.splitEscapedString = function (char) {
+    if (char.length > 1) {
+        throw "Only single character strings are allowed!";
+    }
+    var foundBackslash = false;
+    var splitIndex = [0];
+    for (var i = 0; i < this.length; i++) {
+        var currentChar = this.charAt(i);
+        if (foundBackslash) {
+            foundBackslash = false;
+            continue;
+        }
+        if (currentChar == "\\") {
+            foundBackslash = true;
+            continue;
+        }
+        else {
+            foundBackslash = false;
+        }
+        if (currentChar == char) {
+            splitIndex.push(i);
+        }
+    }
+    splitIndex.push(this.length);
+    var returnAry = [];
+    for (var i = 1; i < splitIndex.length; i++) {
+        var splitted = this.slice(splitIndex[i - 1], splitIndex[i]);
+        if (splitted.charAt(0) == char) {
+            splitted = splitted.substr(1);
+        }
+        returnAry.push(splitted);
+    }
+    return returnAry;
+};
+var AnswerDescriptionPair = (function () {
+    function AnswerDescriptionPair(rawString, questionType) {
+        this.questionType = questionType;
+        this.synonyms = [];
+        this.cleared_synonyms = [];
+        this.descriptionImagePairs = [];
+        var answerDescription = rawString.splitEscapedString("=");
+        var answers = answerDescription[0].splitEscapedString("&");
+        for (var i = 0; i < answers.length; i++) {
+            var x = answers[i].splitEscapedString("|");
+            for (var a = 0; a < x.length; a++) {
+                x[a] = x[a].trim();
+            }
+            this.synonyms.push(x);
+        }
+        var y = answerDescription[1];
+        var imageMatches = y.match(/\[([^\]]+)\]/g);
+        for (var i = 0; i < imageMatches.length; i++) {
+            imageMatches[i] = imageMatches[i].slice(1);
+            imageMatches[i] = imageMatches[i].slice(0, -1);
+            imageMatches[i] = imageMatches[i].trim();
+        }
+        var descriptionMatches = y.replace(/\[([^\]]+)\]/g, '|').splitEscapedString('|');
+        descriptionMatches.pop();
+        for (var i = 0; i < descriptionMatches.length; i++) {
+            descriptionMatches[i] = descriptionMatches[i].trim();
+        }
+        this.descriptionImagePairs = [[]];
+        this.descriptionImagePairs[0] = descriptionMatches;
+        this.descriptionImagePairs[1] = imageMatches;
+    }
+    AnswerDescriptionPair.prototype.checkMatch = function (pInput) {
+        for (var x = 0; x < this.synonyms.length; x++) {
+            for (var y = 0; y < this.synonyms[x].length; y++) {
+                if (pInput == this.synonyms[x][y]) {
+                    return x;
+                }
+            }
+        }
+        return -1;
+    };
+    AnswerDescriptionPair.prototype.checkMatchAndSplice = function (pInput) {
+        var x = this.checkMatch(pInput);
+        if (x != -1) {
+            this.cleared_synonyms.push(this.synonyms.splice(x, 1)[0]);
+            return true;
+        }
+        return false;
+    };
+    return AnswerDescriptionPair;
+}());
 var Spreadsheet;
 (function (Spreadsheet) {
     function getSheet(id, callback) {
@@ -69,57 +154,6 @@ var Spreadsheet;
     }
     Spreadsheet.getWordListFromSheet = getWordListFromSheet;
 })(Spreadsheet || (Spreadsheet = {}));
-var AnswerDescriptionPair = (function () {
-    function AnswerDescriptionPair(rawString, questionType) {
-        this.questionType = questionType;
-        this.synonyms = [];
-        this.cleared_synonyms = [];
-        this.descriptionImagePairs = [];
-        var answerDescription = rawString.split("=");
-        var answers = answerDescription[0].split("&");
-        for (var i = 0; i < answers.length; i++) {
-            var x = answers[i].split("|");
-            for (var a = 0; a < x.length; a++) {
-                x[a] = x[a].trim();
-            }
-            this.synonyms.push(x);
-        }
-        var y = answerDescription[1];
-        var imageMatches = y.match(/\[([^\]]+)\]/g);
-        for (var i = 0; i < imageMatches.length; i++) {
-            imageMatches[i] = imageMatches[i].slice(1);
-            imageMatches[i] = imageMatches[i].slice(0, -1);
-            imageMatches[i] = imageMatches[i].trim();
-        }
-        var descriptionMatches = y.replace(/\[([^\]]+)\]/g, '|').split('|');
-        descriptionMatches.pop();
-        for (var i = 0; i < descriptionMatches.length; i++) {
-            descriptionMatches[i] = descriptionMatches[i].trim();
-        }
-        this.descriptionImagePairs = [[]];
-        this.descriptionImagePairs[0] = descriptionMatches;
-        this.descriptionImagePairs[1] = imageMatches;
-    }
-    AnswerDescriptionPair.prototype.checkMatch = function (pInput) {
-        for (var x = 0; x < this.synonyms.length; x++) {
-            for (var y = 0; y < this.synonyms[x].length; y++) {
-                if (pInput == this.synonyms[x][y]) {
-                    return x;
-                }
-            }
-        }
-        return -1;
-    };
-    AnswerDescriptionPair.prototype.checkMatchAndSplice = function (pInput) {
-        var x = this.checkMatch(pInput);
-        if (x != -1) {
-            this.cleared_synonyms.push(this.synonyms.splice(x, 1)[0]);
-            return true;
-        }
-        return false;
-    };
-    return AnswerDescriptionPair;
-}());
 var input = "";
 var reversed = true;
 var output = "";

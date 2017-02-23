@@ -1,27 +1,28 @@
+/// <reference path="EscapeSplit.ts" />
 interface questionAnswerPair
 {
     questionType:string;
-    checkMatch(pInput:string):boolean;
-    checkMatchAndSplice(pInput:string):number;
+    checkMatch(pInput:string):number;
+    checkMatchAndSplice(pInput:string):boolean;
 }
 
-class AnswerDescriptionPair
+class AnswerDescriptionPair implements questionAnswerPair
 {
     private	synonyms:Array<Array<string>> = []; //The subarray are the alternatives
     private cleared_synonyms:Array<Array<string>> = [];// the words that the user has cleared
 	private descriptionImagePairs:Array<Array<string>>  = [];//descriptionImagePairs[0] is the description in textform, and descriptionImagePairs[1] is the accompanying image-link
 
-    /*
+    /*;
     * @param rawstring Raw-formatted answerDescriptionpair on the form:"synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 = bild1 [bild1.png] bild2 [bild2.png]"
     *
     */
     constructor(rawString:string, public questionType:string)
     {
-        let answerDescription =  rawString.split("=");
-		let answers = answerDescription[0].split("&");
+        let answerDescription =  rawString.splitEscapedString("=");
+		let answers = answerDescription[0].splitEscapedString("&");
         for(let i:number = 0; i < answers.length; i++)
         {
-            let x = answers[i].split("|");
+            let x = answers[i].splitEscapedString("|");
             for(let a = 0 ; a < x.length; a ++)
             {
                 x[a] = x[a].trim();
@@ -40,7 +41,7 @@ class AnswerDescriptionPair
         }
 
         //remove the image-links( [image.png] )
-        let descriptionMatches = y.replace(/\[([^\]]+)\]/g, '|').split('|');
+        let descriptionMatches = y.replace(/\[([^\]]+)\]/g, '|').splitEscapedString('|');
         descriptionMatches.pop();
         for(let i = 0; i < descriptionMatches.length; i++)
         {
@@ -59,7 +60,7 @@ class AnswerDescriptionPair
     *
     * Check if pInput is matching any of the synonyms
     */
-    checkMatch(pInput:string)
+    checkMatch(pInput:string):number
     {
         for(let x:number = 0; x < this.synonyms.length ; x++)
         {
@@ -84,7 +85,7 @@ class AnswerDescriptionPair
     * call checkMatch and remove the matched synonym
     *
     */
-    checkMatchAndSplice(pInput:string)
+    checkMatchAndSplice(pInput:string):boolean
     {
         let x = this.checkMatch(pInput);
         if(x != -1)
