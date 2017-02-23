@@ -20,7 +20,16 @@ buster.testCase("Class AnswerDescriptionPair", {
         var images = [["bild1", "bild2"], ["bild1.png", "bild2.png"]];
         assert.equals(leosTemp.descriptionImagePairs, images);
    },
+    "can handle empty imagees":function(){
+	    var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [] bild2 []");
+        var images = [["bild1", "bild2"], ["", ""]];
+        assert.equals(leosTemp.descriptionImagePairs, images);
 
+        //check one empty image
+ 	    var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 |   syno3 = bild1 [] bild2 [   bild2.png]");
+        var images = [["bild1", "bild2"], ["", "bild2.png"]];
+        assert.equals(leosTemp.descriptionImagePairs, images);
+    },
 
     "passed input test":function(){
 	    var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]");
@@ -42,5 +51,10 @@ buster.testCase("Class AnswerDescriptionPair", {
     "passed questionType test":function(){
 	    var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]", "glossary");
         assert(leosTemp.questionType);
+    },
+    "passed ultimate test":function(){
+	    var leosTemp = new AnswerDescriptionPair("guns\\&roses | guns n roses & hej\\=tjena | \\[bra\\]dåligt & \\#yolo | \\$money | good\\|bad = adasdfadf asdf [asdf] hej hej hallå [asdf] ", "glossary");
+        var synonyms = [["guns\\&roses", "guns n roses"], ["hej\\=tjena", "\\[bra\\]dåligt"], ["\\#yolo", "\\$money", "good\\|bad"]];
+        assert.equals(leosTemp.synonyms, synonyms);
     }
 });

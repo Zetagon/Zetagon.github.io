@@ -30,7 +30,7 @@ class AnswerDescriptionPair implements questionAnswerPair
 			this.synonyms.push(x);
         }
 		let y:any = answerDescription[1];
-		let imageMatches = y.match(/\[([^\]]+)\]/g);//get image-links ( [image.png] )
+		let imageMatches = y.match(/\[([^\]]*)\]/g);//get image-links ( [image.png] )
 
         //remove the surrounding square-parentheses
         for(let i = 0; i < imageMatches.length ; i++)
@@ -41,7 +41,7 @@ class AnswerDescriptionPair implements questionAnswerPair
         }
 
         //remove the image-links( [image.png] )
-        let descriptionMatches = y.replace(/\[([^\]]+)\]/g, '|').splitEscapedString('|');
+        let descriptionMatches = y.replace(/\[([^\]]*)\]/g, '|').splitEscapedString('|');
         descriptionMatches.pop();
         for(let i = 0; i < descriptionMatches.length; i++)
         {

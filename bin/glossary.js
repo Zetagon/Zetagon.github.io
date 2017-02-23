@@ -48,13 +48,13 @@ var AnswerDescriptionPair = (function () {
             this.synonyms.push(x);
         }
         var y = answerDescription[1];
-        var imageMatches = y.match(/\[([^\]]+)\]/g);
+        var imageMatches = y.match(/\[([^\]]*)\]/g);
         for (var i = 0; i < imageMatches.length; i++) {
             imageMatches[i] = imageMatches[i].slice(1);
             imageMatches[i] = imageMatches[i].slice(0, -1);
             imageMatches[i] = imageMatches[i].trim();
         }
-        var descriptionMatches = y.replace(/\[([^\]]+)\]/g, '|').splitEscapedString('|');
+        var descriptionMatches = y.replace(/\[([^\]]*)\]/g, '|').splitEscapedString('|');
         descriptionMatches.pop();
         for (var i = 0; i < descriptionMatches.length; i++) {
             descriptionMatches[i] = descriptionMatches[i].trim();
