@@ -26,5 +26,22 @@ buster.testCase("Function splitEscapedString" , {
         var result = testString.splitEscapedString("&");
         var expected = ["abc\\&def", "ghi", "jkl\\&mno"];
         assert.equals(result, expected);
+    },
+    "refuses inputs longer than one char":function(){
+        var testString = "abc\\&def&ghi&jkl\\&mno";
+        var expected = ["abc\\&def", "ghi", "jkl\\&mno"];
+        var success = true;
+        try
+        {
+            var result = testString.splitEscapedString("&&");
+        }
+        catch(err)
+        {
+            console.log(err);
+            success = false;
+            refute(success);
+        }
+        refute(success);
+        
     }
 });
