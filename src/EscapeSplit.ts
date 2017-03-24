@@ -1,8 +1,11 @@
 /*
+* similar to String.prototype.split() but skips over escaped characters
+*   Ex.
+*     "hello\\&hi&goodbye".splitEscapedString("&")
+* > ["hello\\&hi", "goodbye"]
 *
-*
-*
-*
+*  @param char single character long string. 
+*  @return an array containing strings
 */
 String.prototype.splitEscapedString = function( char:string )
 {
@@ -12,7 +15,7 @@ String.prototype.splitEscapedString = function( char:string )
         throw "Only single character strings are allowed!";
     }
 
-    let foundBackslash:bool = false;
+    let foundBackslash:boolean = false;
     let splitIndex:Array<number> = [0];
 
     for(let i = 0; i < this.length; i++)
