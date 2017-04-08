@@ -4,6 +4,7 @@ interface questionAnswerPair
     questionType:string;
     checkMatch(pInput:string):number;
     checkMatchAndSplice(pInput:string):boolean;
+    userHasCleared():boolean;
 }
 
 class AnswerDescriptionPair implements questionAnswerPair
@@ -96,4 +97,13 @@ class AnswerDescriptionPair implements questionAnswerPair
         return false;
     }
 
+    /*
+     * determine wheter user has cleared this AnswerDescriptionPair
+     *
+     * @return true if user has cleared, false if not 
+     *
+     */
+    userHasCleared():boolean {
+        return this.cleared_synonyms.length < this.synonyms.length;
+    }
 }
