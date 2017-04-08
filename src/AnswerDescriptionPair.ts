@@ -8,9 +8,9 @@ interface questionAnswerPair
 
 class AnswerDescriptionPair implements questionAnswerPair
 {
-    private	synonyms:Array<Array<string>> = []; //The subarray are the alternatives
+    private synonyms:Array<Array<string>> = []; //The subarray are the alternatives
     private cleared_synonyms:Array<Array<string>> = [];// the words that the user has cleared
-	private descriptionImagePairs:Array<Array<string>>  = [];//descriptionImagePairs[0] is the description in textform, and descriptionImagePairs[1] is the accompanying image-link
+    private descriptionImagePairs:Array<Array<string>>  = [];//descriptionImagePairs[0] is the description in textform, and descriptionImagePairs[1] is the accompanying image-link
 
     /*;
     * @param rawstring Raw-formatted answerDescriptionpair on the form:"synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 = bild1 [bild1.png] bild2 [bild2.png]"
@@ -19,7 +19,7 @@ class AnswerDescriptionPair implements questionAnswerPair
     constructor(rawString:string, public questionType:string)
     {
         let answerDescription =  rawString.splitEscapedString("=");
-		let answers = answerDescription[0].splitEscapedString("&");
+        let answers = answerDescription[0].splitEscapedString("&");
         for(let i:number = 0; i < answers.length; i++)
         {
             let x = answers[i].splitEscapedString("|");
@@ -27,10 +27,10 @@ class AnswerDescriptionPair implements questionAnswerPair
             {
                 x[a] = x[a].trim();
             }
-			this.synonyms.push(x);
+            this.synonyms.push(x);
         }
-		let y:any = answerDescription[1];
-		let imageMatches = y.match(/\[([^\]]*)\]/g);//get image-links ( [image.png] )
+        let y:any = answerDescription[1];
+        let imageMatches = y.match(/\[([^\]]*)\]/g);//get image-links ( [image.png] )
 
         //remove the surrounding square-parentheses
         for(let i = 0; i < imageMatches.length ; i++)
@@ -67,12 +67,12 @@ class AnswerDescriptionPair implements questionAnswerPair
             for(let y:number = 0; y < this.synonyms[x].length ; y++)
             {
                 if(pInput == this.synonyms[x][y])
-				{
+                    {
                         return x;
-				}
+                    }
             }
         }
-		return -1;
+        return -1;
     }
 
 
