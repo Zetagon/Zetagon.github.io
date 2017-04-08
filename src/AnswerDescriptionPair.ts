@@ -21,16 +21,23 @@ interface Description{
 
 class AnswerDescriptionPair implements questionAnswerPair
 {
+    public questionType = "SynonymAlternative-Description";
     private synonyms:Array<Synonym> = []; //The subarray are the alternatives
+        setSynonyms(arg:Array<Synonym>){ this.synonyms = arg; }
     private cleared_synonyms:Array<Synonym> = [];// the words that the user has cleared
     private descriptionImagePairs:Array<Description>  = [];//descriptionImagePairs[0] is the description in textform, and descriptionImagePairs[1] is the accompanying image-link
+        setDescriptionImagePairs(arg:Array<Description>){ this.descriptionImagePairs = arg; }
 
     /*;
     * @param rawstring Raw-formatted answerDescriptionpair on the form:"synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 = bild1 [bild1.png] bild2 [bild2.png]"
     *
     */
-    constructor(rawString:string, public questionType:string)
+    constructor(rawString:string)
     {
+        if(!rawString){
+            return;
+        }
+
         let answerDescription =  rawString.splitEscapedString("=");
         let answers = answerDescription[0].splitEscapedString("&");
         for(let i:number = 0; i < answers.length; i++)
@@ -65,7 +72,7 @@ class AnswerDescriptionPair implements questionAnswerPair
         for(let i = 0; i < descriptionMatches.length; i++){
             this.descriptionImagePairs.push({
                 text:descriptionMatches[i],
-                url:imageMatches[1]
+                url:imageMatches[i]
             });
         }
         //this.descriptionImagePairs[0] = descriptionMatches;
@@ -127,14 +134,11 @@ class AnswerDescriptionPair implements questionAnswerPair
 }
 
 function create_AnswerDescriptionPair_fromJSON(json:any):AnswerDescriptionPair {
-    for(let i = 0; i < json.descriptions.length; i++ ){
-        this.descriptionImagePairs[0] = json.descriptions[i].text;
-        this.descriptionImagePairs[1] = json.descriptions[i].url;
-    }
-    for(let i = 0; i < json.synonyms.length; i++){
-        for(let a = 0; a < json.synonyms.alternatives.length; a++){
-            this.synonyms[i] = json.synonyms.alternatives[a].text;
-        }
-    }
+    let descriptionImagePairs = json.descriptions;
+    let synonyms = json.synonyms
+    let adp = new AnswerDescriptionPair("");
+    adp.setDescriptionImagePairs(descriptionImagePairs);
+    adp.setSynonyms(synonyms);
+    return adp;
 }
 
