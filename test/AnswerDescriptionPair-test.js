@@ -3,8 +3,7 @@ var refute = buster.refute;
 buster.testCase("Class AnswerDescriptionPair", {
 
     "has working synonyms":function(){
-	   var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]");
-        var synonyms = [["synonym1" , "synonymer1" , "syno1"], ["synonym2" , "synonymer2" , "syno2"], ["synonym3" , "synonymer3" , "syno3"]];
+	var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]");
         var synonyms = [
             { 
                 alternatives:[
@@ -93,7 +92,7 @@ buster.testCase("Class AnswerDescriptionPair", {
     },
 
     "passed input test":function(){
-	    var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]");
+	var leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]");
         assert(leosTemp.checkMatchAndSplice("synonym1"));
         refute(leosTemp.checkMatchAndSplice("synonym1"));
 
@@ -106,6 +105,42 @@ buster.testCase("Class AnswerDescriptionPair", {
         refute(leosTemp.checkMatchAndSplice("synonym3"));
 
         refute(leosTemp.checkMatchAndSplice("synonymer1"));
+
+        var json = {
+            descriptions:
+            [
+                {
+                    text: "Detta är en otroligt fantastisk beskrivning",
+                    url: "http://hexeye.se/leo/roliga-projekt/snurr.png"
+                }
+            ],
+            synonyms: 
+            [
+                {
+                    alternatives:
+                    [
+                        { text: "hello"},
+                        { text: "hi"}
+                    ]
+                },
+                {
+                    alternatives:
+                    [
+                        { text: "have a god day"},
+                        { text: "have a nice day"},
+                        { text: "have a good one"}
+                    ]
+                }
+            ]
+        };
+        leosTemp = create_AnswerDescriptionPair_fromJSON(json);
+        assert(leosTemp.checkMatchAndSplice("hello"));
+        refute(leosTemp.checkMatchAndSplice("hi"));
+
+        assert(leosTemp.checkMatchAndSplice("have a god day"));
+        refute(leosTemp.checkMatchAndSplice("have a nice day"));
+
+
     },
 
 
@@ -114,7 +149,8 @@ buster.testCase("Class AnswerDescriptionPair", {
         assert(leosTemp.questionType);
     },
     "passed ultimate test":function(){
-	    var leosTemp = new AnswerDescriptionPair("guns\\&roses | guns n roses & hej\\=tjena | \\[bra\\]dåligt & \\#yolo | \\$money | good\\|bad = adasdfadf asdf [asdf] hej hej hallå [asdf] ", "glossary");
+        var string = "guns\\&roses | guns n roses & hej\\=tjena | \\[bra\\]dåligt & \\#yolo | \\$money | good\\|bad = adasdfadf asdf [asdf] hej hej hallå [asdf] ";
+	var leosTemp = new AnswerDescriptionPair(string , "glossary");
         //var synonyms = [["guns\\&roses", "guns n roses"], ["hej\\=tjena", "\\[bra\\]dåligt"], ["\\#yolo", "\\$money", "good\\|bad"]];
         var synonyms = [
             {
@@ -138,5 +174,7 @@ buster.testCase("Class AnswerDescriptionPair", {
             }
         ];
         assert.equals(leosTemp.synonyms, synonyms);
+
+
     }
 });
