@@ -23,7 +23,6 @@ function swapWordList()
 
 window.onload = function LoadMenu()
 {
-	let leosTemp = new AnswerDescriptionPair("synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 & synonym3 | synonymer3 | syno3 = bild1 [bild1.png] bild2 [bild2.png]");
 
 	document.title = "English Plus";
 	let sheetID:string = "1PSbyHpSwYwezRiUTRo6lsn4b9O13R_xPjEZ50-ehjEM";
