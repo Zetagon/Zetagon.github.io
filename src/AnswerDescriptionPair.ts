@@ -7,11 +7,23 @@ interface questionAnswerPair
     userHasCleared():boolean;
 }
 
+interface Alternative{
+    text:string;
+}
+interface Synonym{
+    alternatives:Array<Alternative>;
+}
+
+interface Description{
+   text:string; 
+   url:string;
+}
+
 class AnswerDescriptionPair implements questionAnswerPair
 {
-    private synonyms:Array<Array<string>> = []; //The subarray are the alternatives
-    private cleared_synonyms:Array<Array<string>> = [];// the words that the user has cleared
-    private descriptionImagePairs:Array<Array<string>>  = [];//descriptionImagePairs[0] is the description in textform, and descriptionImagePairs[1] is the accompanying image-link
+    private synonyms:Array<Synonym> = []; //The subarray are the alternatives
+    private cleared_synonyms:Array<Synonym> = [];// the words that the user has cleared
+    private descriptionImagePairs:Array<Description>  = [];//descriptionImagePairs[0] is the description in textform, and descriptionImagePairs[1] is the accompanying image-link
 
     /*;
     * @param rawstring Raw-formatted answerDescriptionpair on the form:"synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 = bild1 [bild1.png] bild2 [bild2.png]"
@@ -26,9 +38,9 @@ class AnswerDescriptionPair implements questionAnswerPair
             let x = answers[i].splitEscapedString("|");
             for(let a = 0 ; a < x.length; a ++)
             {
-                x[a] = x[a].trim();
+                x[a] = { text: x[a].trim() };// match the structure of the interface Alternative
             }
-            this.synonyms.push(x);
+            this.synonyms.push({ alternatives: x });//match the structure of the interface Synonym
         }
         let y:any = answerDescription[1];
         let imageMatches = y.match(/\[([^\]]*)\]/g);//get image-links ( [image.png] )
@@ -50,27 +62,33 @@ class AnswerDescriptionPair implements questionAnswerPair
         }
 
         //fill in the images and descriptions
-        this.descriptionImagePairs = [[]];
-        this.descriptionImagePairs[0] = descriptionMatches;
-        this.descriptionImagePairs[1] = imageMatches;
+        for(let i = 0; i < descriptionMatches.length; i++){
+            this.descriptionImagePairs.push({
+                text:descriptionMatches[i],
+                url:imageMatches[1]
+            });
+        }
+        //this.descriptionImagePairs[0] = descriptionMatches;
+        //this.descriptionImagePairs[1] = imageMatches;
     }
+
     /*
-    * @param pInput input from the user
-    *
-    * @return the index of the synonym that matched pInput
-    *
-    * Check if pInput is matching any of the synonyms
-    */
+     * @param pInput input from the user
+     *
+     * @return the index of the synonym that matched pInput
+     *
+     * Check if pInput is matching any of the synonyms
+     */
     checkMatch(pInput:string):number
     {
         for(let x:number = 0; x < this.synonyms.length ; x++)
         {
-            for(let y:number = 0; y < this.synonyms[x].length ; y++)
+            for(let y:number = 0; y < this.synonyms[x].alternatives.length ; y++)
             {
-                if(pInput == this.synonyms[x][y])
-                    {
-                        return x;
-                    }
+                if(pInput == this.synonyms[x].alternatives[y].text)
+                {
+                    return x;
+                }
             }
         }
         return -1;
@@ -107,3 +125,16 @@ class AnswerDescriptionPair implements questionAnswerPair
         return this.cleared_synonyms.length < this.synonyms.length;
     }
 }
+
+function create_AnswerDescriptionPair_fromJSON(json:any):AnswerDescriptionPair {
+    for(let i = 0; i < json.descriptions.length; i++ ){
+        this.descriptionImagePairs[0] = json.descriptions[i].text;
+        this.descriptionImagePairs[1] = json.descriptions[i].url;
+    }
+    for(let i = 0; i < json.synonyms.length; i++){
+        for(let a = 0; a < json.synonyms.alternatives.length; a++){
+            this.synonyms[i] = json.synonyms.alternatives[a].text;
+        }
+    }
+}
+
