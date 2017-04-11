@@ -54,3 +54,7 @@ function create_MultipleChoice_DescriptionPair_fromJSON(json:any):MultipleChoice
     adp.setChoices(choices);
     return adp;
 }
+
+function isMultipleChoice_DescriptionPair( pair:questionAnswerPair ): pair is MultipleChoice_DescriptionPair {
+    return  pair.questionType ===   "MultipleChoice-Description";
+}

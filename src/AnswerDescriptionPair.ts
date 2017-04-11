@@ -2,9 +2,9 @@
 interface questionAnswerPair
 {
     questionType:string;
-    checkMatch(pInput:string):number;
-    checkMatchAndSplice(pInput:string):boolean;
-    userHasCleared():boolean;
+//    checkMatch(pInput:string):number;
+//    checkMatchAndSplice(pInput:string):boolean;
+//    userHasCleared():boolean;
 }
 
 interface Alternative{
@@ -22,10 +22,11 @@ interface Description{
 class AnswerDescriptionPair implements questionAnswerPair
 {
     public questionType = "SynonymAlternative-Description";
-    private synonyms:Array<Synonym> = []; //The subarray are the alternatives
+    private synonyms:Array<Synonym> = []; 
+        getSynonyms(){return this.synonyms; }
         setSynonyms(arg:Array<Synonym>){ this.synonyms = arg; }
-    private cleared_synonyms:Array<Synonym> = [];// the words that the user has cleared
-    private descriptionImagePairs:Array<Description>  = [];//descriptionImagePairs[0] is the description in textform, and descriptionImagePairs[1] is the accompanying image-link
+    private cleared_synonyms:Array<Synonym> = [];
+    private descriptionImagePairs:Array<Description>  = [];
         setDescriptionImagePairs(arg:Array<Description>){ this.descriptionImagePairs = arg; }
 
     /*;
@@ -142,3 +143,6 @@ function create_AnswerDescriptionPair_fromJSON(json:any):AnswerDescriptionPair {
     return adp;
 }
 
+function isAnswerDescriptionPair( pair:questionAnswerPair ): pair is AnswerDescriptionPair {
+    return  pair.questionType ===  "SynonymAlternative-Description" ;
+}
