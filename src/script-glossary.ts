@@ -49,6 +49,7 @@ window.onload = function LoadMenu() {
         }
     }
 }
+
 /**
  * The callbackfunction that is called by html DOM #left_menu .navigation_item which was created with data from spreadsheets
  * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary()
@@ -66,6 +67,7 @@ function callbackSheetAry(name:string) {
         }
     }
 }
+
 /**
  * currently not in use
  * Puts the glossary named 'name' into Wordlist_Unmodified and runs Start_Glossary(), but it does a http request every time. It is therefore recommended to use callbackSheetAry instead 
@@ -138,7 +140,39 @@ function GetWordListFromServer(filename:string) {
     server_file_request.onreadystatechange = function(){  // This function will run whenever there the state of the XMLHttpRequest updates
 
         if (server_file_request.readyState==4 && server_file_request.status==200){  // When this is the case the response is ready to collect
-//========================================================================================================================
+
+            var wordfiletext = server_file_request.responseText;  // The file is saved to a variable in order to not rely on the XMLHttpRequest anymore
+            var wordpairs:Array<string> = wordfiletext.split(/\r\n|\r|\n/g);  // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
+            for (let i = 0; i < wordpairs.length; i++){  // Splitting the wordpairs into induvidual words and saving them to a left and right word-list
+
+                var wordpair = wordpairs[i].split("=");
+                ListLeft[i]=wordpair[0];
+                ListRight[i]=wordpair[1];
+            }
+            BothLists = [ListLeft, ListRight];
+        }
+    }
+
+    server_file_request.open("GET",filename ,false);  // Preparing a GET request for the word-list-file
+    server_file_request.send();  // Sending the request
+    return BothLists;
+}
+
+function GetJSONFromServer(filename:string) {
+    var ListLeft:Array<string> = [];
+    var ListRight:Array<string> = [];
+    var BothLists:Array<Array<string>>;
+    var server_file_request:XMLHttpRequest;
+    if(window.XMLHttpRequest) {// checking if the browser is using the old or the new system for XMLHttpRequests and adapting
+
+        server_file_request = new XMLHttpRequest();
+    }
+    else {
+        server_file_request = new ActiveXObject("Microsoft.XMLHTTP");  // Detta är för att skräpläsaren Internet explorer också ska fatta ;)
+    }
+    server_file_request.onreadystatechange = function(){  // This function will run whenever there the state of the XMLHttpRequest updates
+
+        if (server_file_request.readyState==4 && server_file_request.status==200){  // When this is the case the response is ready to collect
             var wordfiletext = server_file_request.responseText;  // The file is saved to a variable in order to not rely on the XMLHttpRequest anymore
             let isInJsonFormat = true
             try{// determine if text is in jsonformat
@@ -169,6 +203,7 @@ function GetWordListFromServer(filename:string) {
 function getRandomArbitrary(min:number, max:number) {
     return Math.floor(Math.random() * (max - min) + min);  // värdet kan aldrig anta MAX då Math.random aldrig kan bli ett därför adderars 1
 }
+
 function NewWord() {
     function printScore() {
         var outputstring = "";
@@ -280,6 +315,7 @@ function checkCorrectness(pInput:string , pAnswer:string , pAnswerAry:Array<stri
     }
     return false;
 }
+
 function HandleInput() {
     if(playing) {
         SaveAndClearInput();
