@@ -7,7 +7,7 @@ interface Choice{
 class MultipleChoice_DescriptionPair implements questionAnswerPair 
 {
     public questionType = "MultipleChoice-Description";
-    private descriptionImagePairs:Array<Description> = [];
+    public descriptionImagePairs:Array<Description> = [];
         setDescriptionImagePairs(arg:Array<Description>){ this.descriptionImagePairs = arg; }
 
     private choices:Array<Choice> = [];

@@ -156,7 +156,7 @@ var AnswerDescriptionPair = (function () {
      *
      */
     AnswerDescriptionPair.prototype.userHasCleared = function () {
-        return this.cleared_synonyms.length < this.synonyms.length;
+        return this.synonyms.length === 0;
     };
     return AnswerDescriptionPair;
 }());
@@ -481,13 +481,11 @@ function GetJSONFromServer(filename) {
                 var json = JSON.parse(wordfiletext);
                 globals.questionHandler = new QuestionHandler(json.answerDescriptionPairs);
                 globals.questionHandler.new_Question();
-                alert(globals.questionHandler);
             }
             else {
                 var wordpairs = wordfiletext.split(/\r\n|\r|\n/g); // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
                 globals.questionHandler = createQuestionHandlerFromRawText(wordpairs);
                 globals.questionHandler.new_Question();
-                alert(globals.questionHandler);
             }
         }
     };
@@ -498,7 +496,11 @@ function GetJSONFromServer(filename) {
 function init() {
     initializePage(); // Called only once to layout the page
     GetJSONFromServer("words/json.txt");
+    nextQuestion();
+}
+function nextQuestion() {
     globals.questionHandler.new_Question();
+    var currentQuestion = globals.questionHandler.currentQuestion;
     // Tutorial begin here!
     function printArray(inputAry) {
         var currentQuestion = globals.questionHandler.currentQuestion;
@@ -515,13 +517,24 @@ function init() {
                 correctAnswers.push(synonyms[i].alternatives[0].text);
             }
             setCorrectionString("Du svarade: " + correctAnswers.toString().replace(/,/g, ", ")); // Setting the correction string as a demonstration
+            if (currentQuestion.userHasCleared()) {
+                nextQuestion();
+                setCorrectionString("Correct!");
+            }
+            else {
+                setInputboxes(currentQuestion.getSynonyms().length); // Generating the inputboxes insert the number of inputboxes required
+            }
         }
         // Do whatever, maybe check if the answers are correct
+    }
+    if (isAnswerDescriptionPair(currentQuestion)) {
+        setInputboxes(currentQuestion.getSynonyms().length); // Generating the inputboxes insert the number of inputboxes required
+    }
+    else {
     }
     setCallback(printArray); // Sets the function to be called when the user submit their response this can be reset at any time
     // These are called every new question
     setDescriptions(globals.questionHandler.currentQuestion.descriptionImagePairs); // Sending the array of descriptions for display
-    setInputboxes(2); // Generating the inputboxes insert the number of inputboxes required
     setCorrectionString(""); // Maybe clear the correction on new question Setting a new strinf will however replace the current text
 }
 /**

@@ -159,7 +159,7 @@ class AnswerDescriptionPair implements questionAnswerPair
      *
      */
     userHasCleared():boolean {
-        return this.cleared_synonyms.length < this.synonyms.length;
+        return this.synonyms.length === 0;
     }
 }
 

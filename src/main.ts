@@ -38,12 +38,10 @@ function GetJSONFromServer(filename:string) {
                 var json = JSON.parse(wordfiletext);
                 globals.questionHandler = new QuestionHandler(json.answerDescriptionPairs);
                 globals.questionHandler.new_Question();
-                alert(globals.questionHandler);
             }else{
                 var wordpairs:Array<string> = wordfiletext.split(/\r\n|\r|\n/g);  // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
                 globals.questionHandler =  createQuestionHandlerFromRawText(wordpairs);
                 globals.questionHandler.new_Question();
-                alert(globals.questionHandler);
             }
         }
     }
@@ -55,16 +53,19 @@ function GetJSONFromServer(filename:string) {
 
 function init(){
     initializePage(); // Called only once to layout the page
-
     GetJSONFromServer("words/json.txt")
+    nextQuestion();
+}
+function nextQuestion(){
+
     globals.questionHandler.new_Question();
+    let currentQuestion = globals.questionHandler.currentQuestion;
 
     // Tutorial begin here!
     function printArray( inputAry:Array<string> ) {
 
         let currentQuestion = globals.questionHandler.currentQuestion;
         if(isAnswerDescriptionPair( currentQuestion ) ){
-            // TODO: Make the textboxes become red or green
             let answerMarks = [];
             let result = currentQuestion.checkMatchAndSpliceOnArray(inputAry);
             for( let i = 0; i < result.length ; i++){
@@ -78,15 +79,27 @@ function init(){
             }
             setCorrectionString("Du svarade: " + correctAnswers.toString().replace(/,/g, ", ")); // Setting the correction string as a demonstration
 
+            if(currentQuestion.userHasCleared()){
+                nextQuestion();
+                setCorrectionString("Correct!");
+            }
+            else{
+                setInputboxes(currentQuestion.getSynonyms().length); // Generating the inputboxes insert the number of inputboxes required
+            }
         }
 
         // Do whatever, maybe check if the answers are correct
     }
 
+    if (isAnswerDescriptionPair(currentQuestion) ){
+        setInputboxes(currentQuestion.getSynonyms().length); // Generating the inputboxes insert the number of inputboxes required
+    }
+    else{
+        // TODO: 
+    }
     setCallback(printArray); // Sets the function to be called when the user submit their response this can be reset at any time
 
     // These are called every new question
     setDescriptions(globals.questionHandler.currentQuestion.descriptionImagePairs); // Sending the array of descriptions for display
-    setInputboxes(2); // Generating the inputboxes insert the number of inputboxes required
     setCorrectionString(""); // Maybe clear the correction on new question Setting a new strinf will however replace the current text
 }
