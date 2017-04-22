@@ -11,7 +11,7 @@
                     "url": "http://hexeye.se/leo/roliga-projekt/snurr.png"
                 }
             ],
-            "synonyms": 
+            "synonyms":
             [
                 {
                     "alternatives":
@@ -35,25 +35,50 @@
             "descriptions":
             [
                 {
-                    "text": "Detta är en otroligt fantastisk beskrivning",
+                    "text": "Nej-fraser",
                     "url": "http://hexeye.se/leo/roliga-projekt/snurr.png"
                 }
             ],
-            "synonyms": 
+            "synonyms":
             [
                 {
                     "alternatives":
                     [
-                        { "text": "hello"},
-                        { "text": "hi"}
+                        { "text": "nej"},
+                        { "text": "nope"}
                     ]
                 },
                 {
                     "alternatives":
                     [
-                        { "text": "have a god day"},
-                        { "text": "have a nice day"},
-                        { "text": "have a good one"}
+                        { "text": "No"},
+                        { "text": "nay"}
+                    ]
+                }
+            ]
+        },
+        {
+            "question_type": "SynonymAlternative-Description",
+            "descriptions":
+            [
+                {
+                    "text": "avskedsfraser",
+                    "url": "http://hexeye.se/leo/roliga-projekt/snurr.png"
+                }
+            ],
+            "synonyms":
+            [
+                {
+                    "alternatives":
+                    [
+                        { "text": "bye"},
+                        { "text": "goodbye"}
+                    ]
+                },
+                {
+                    "alternatives":
+                    [
+                        { "text": "Adjö"}
                     ]
                 }
             ]

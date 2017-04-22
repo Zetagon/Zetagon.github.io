@@ -77,7 +77,7 @@ function nextQuestion(){
             for(let i = 0; i < synonyms.length ; i++){
                 correctAnswers.push( synonyms[i].alternatives[0].text );
             }
-            setCorrectionString("Du svarade: " + correctAnswers.toString().replace(/,/g, ", ")); // Setting the correction string as a demonstration
+            setCorrectionString("Fel! Rätt svar var: " + correctAnswers.toString().replace(/,/g, ", ")); // Setting the correction string as a demonstration
 
             if(currentQuestion.userHasCleared()){
                 nextQuestion();
@@ -95,7 +95,7 @@ function nextQuestion(){
         setInputboxes(currentQuestion.getSynonyms().length); // Generating the inputboxes insert the number of inputboxes required
     }
     else{
-        // TODO: 
+        // TODO:
     }
     setCallback(printArray); // Sets the function to be called when the user submit their response this can be reset at any time
 

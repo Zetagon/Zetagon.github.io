@@ -243,9 +243,16 @@ var QuestionHandler = (function () {
                 this.questions.push(create_AnswerDescriptionPair_fromJSON(json[i]));
             }
         }
+        this.currentQuestionIndex = 0;
+        this.currentQuestion = this.questions[0];
     }
     QuestionHandler.prototype.setQuestions = function (arg) { this.questions = arg; };
     QuestionHandler.prototype.new_Question = function () {
+        if (isAnswerDescriptionPair(this.currentQuestion)) {
+            if (this.currentQuestion.userHasCleared()) {
+                this.clearedQuestions.push(this.questions.splice(this.currentQuestionIndex, 1)[0]);
+            }
+        }
         this.currentQuestionIndex = getRandomArbitrary(0, this.questions.length);
         this.currentQuestion = this.questions[this.currentQuestionIndex];
     };
@@ -516,7 +523,7 @@ function nextQuestion() {
             for (var i = 0; i < synonyms.length; i++) {
                 correctAnswers.push(synonyms[i].alternatives[0].text);
             }
-            setCorrectionString("Du svarade: " + correctAnswers.toString().replace(/,/g, ", ")); // Setting the correction string as a demonstration
+            setCorrectionString("Fel! Rätt svar var: " + correctAnswers.toString().replace(/,/g, ", ")); // Setting the correction string as a demonstration
             if (currentQuestion.userHasCleared()) {
                 nextQuestion();
                 setCorrectionString("Correct!");

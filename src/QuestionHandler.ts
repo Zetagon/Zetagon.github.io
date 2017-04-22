@@ -21,9 +21,16 @@ class QuestionHandler
                 this.questions.push(create_AnswerDescriptionPair_fromJSON(json[i]));
             }
         }
+        this.currentQuestionIndex = 0;
+        this.currentQuestion = this.questions[0];
     }
 
     new_Question(){
+        if(isAnswerDescriptionPair(this.currentQuestion)){
+            if(this.currentQuestion.userHasCleared()){
+                this.clearedQuestions.push(this.questions.splice(this.currentQuestionIndex, 1)[0])
+            }
+        }
         this.currentQuestionIndex = getRandomArbitrary(0, this.questions.length);
         this.currentQuestion = this.questions[this.currentQuestionIndex] ;
     }
@@ -32,7 +39,7 @@ class QuestionHandler
 //            throw new Error("Question-type Error! This question is not of type 'SynonymAlternative-Description'");
 //        }
         if( isAnswerDescriptionPair(this.currentQuestion) ){
-        
+
             if(this.currentQuestion.checkMatchAndSplice( userInput )){
                 if( this.currentQuestion.userHasCleared()){
                 }
