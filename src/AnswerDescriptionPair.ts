@@ -1,7 +1,12 @@
 /// <reference path="EscapeSplit.ts" />
+interface AnswerDescriptionResult{
+    cleared:boolean;
+    text:string;
+}
 interface questionAnswerPair
 {
     questionType:string;
+    descriptionImagePairs:Array<Description>;
 //    checkMatch(pInput:string):number;
 //    checkMatchAndSplice(pInput:string):boolean;
 //    userHasCleared():boolean;
@@ -26,7 +31,7 @@ class AnswerDescriptionPair implements questionAnswerPair
         getSynonyms(){return this.synonyms; }
         setSynonyms(arg:Array<Synonym>){ this.synonyms = arg; }
     private cleared_synonyms:Array<Synonym> = [];
-    private descriptionImagePairs:Array<Description>  = [];
+    public descriptionImagePairs:Array<Description>  = [];
         setDescriptionImagePairs(arg:Array<Description>){ this.descriptionImagePairs = arg; }
 
     /*;
@@ -121,6 +126,30 @@ class AnswerDescriptionPair implements questionAnswerPair
             return true;
         }
         return false;
+    }
+
+    /*
+     *
+     * @param pInput input from the user
+     *
+     * @return an array with an object with the following properties:
+     *  - text: the input that the user entered
+     *  - cleared: whether the input was correct or not
+     *
+     */
+    checkMatchAndSpliceOnArray(pInput:Array<string>):Array<AnswerDescriptionResult>{
+        let returnAry = [];
+        for(let i = 0; i < pInput.length ; i++){
+            if( this.checkMatchAndSplice( pInput[i] ) ){
+                let obj = { cleared:true, text:pInput[i] };
+                returnAry.push(obj);
+            }
+            else{
+                let obj = { cleared:false, text:pInput[i] };
+                returnAry.push(obj);
+            }
+        }
+        return returnAry;
     }
 
     /*

@@ -3,6 +3,7 @@ var refute = buster.refute;
 
 buster.testCase("Class Multiple_ChoicesDescriptionPair", {
     "passes a basic test": function(){
+
         var json = {
             descriptions:
             [

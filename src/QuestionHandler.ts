@@ -3,11 +3,11 @@
 
 class QuestionHandler
 {
-    private questions:Array<questionAnswerPair> = [];
+    public questions:Array<questionAnswerPair> = [];
         public setQuestions(arg:Array<questionAnswerPair>){ this.questions = arg;}
     private clearedQuestions:Array<questionAnswerPair> = [];
     private currentQuestionIndex:number = 0;
-    private currentQuestion:questionAnswerPair;
+    public currentQuestion:questionAnswerPair;
 
     constructor(json:Array<any>){
         if(!json){
@@ -40,6 +40,9 @@ class QuestionHandler
             }
             else{
                 let returnString = "";
+                if(this.currentQuestion.getSynonyms.length > 1){
+                    returnString = "Wrong! The correct answers were ";
+                }
                 let synonyms = this.currentQuestion.getSynonyms();
                 for (var i = 0, len = synonyms.length; i < len; i++) {
                     returnString += synonyms[i].alternatives[0].text;
@@ -50,7 +53,7 @@ class QuestionHandler
                 return returnString;
             }
         }
-        else{
+        else if( isMultipleChoice_DescriptionPair( this.currentQuestion ) ){
             //todo: handle MultipleChoice
         }
     }
