@@ -1,0 +1,62 @@
+{
+    "listName": "Detta är ett namn på en lista",
+    "answerDescriptionPairs":
+    [
+        {
+            "question_type": "SynonymAlternative-Description",
+            "descriptions":
+            [
+                {
+                    "text": "Detta är en otroligt fantastisk beskrivning",
+                    "url": "http://hexeye.se/leo/roliga-projekt/snurr.png"
+                }
+            ],
+            "synonyms": 
+            [
+                {
+                    "alternatives":
+                    [
+                        { "text": "hello"},
+                        { "text": "hi"}
+                    ]
+                },
+                {
+                    "alternatives":
+                    [
+                        { "text": "have a god day"},
+                        { "text": "have a nice day"},
+                        { "text": "have a good one"}
+                    ]
+                }
+            ]
+        },
+        {
+            "question_type": "SynonymAlternative-Description",
+            "descriptions":
+            [
+                {
+                    "text": "Detta är en otroligt fantastisk beskrivning",
+                    "url": "http://hexeye.se/leo/roliga-projekt/snurr.png"
+                }
+            ],
+            "synonyms": 
+            [
+                {
+                    "alternatives":
+                    [
+                        { "text": "hello"},
+                        { "text": "hi"}
+                    ]
+                },
+                {
+                    "alternatives":
+                    [
+                        { "text": "have a god day"},
+                        { "text": "have a nice day"},
+                        { "text": "have a good one"}
+                    ]
+                }
+            ]
+        }
+    ]
+}
