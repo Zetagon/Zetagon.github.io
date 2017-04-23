@@ -43,6 +43,26 @@ String.prototype.splitEscapedString = function (char) {
     return returnAry;
 };
 /// <reference path="EscapeSplit.ts" />
+/*
+* Compare two synonyms.
+*
+* @param x a synonym
+* @param y a synonym
+*
+* @return true if the synonyms are equal, false if not
+*/
+function isSynonymEqual(x, y) {
+    var sortX = x.alternatives.sort();
+    var sortY = y.alternatives.sort();
+    for (var a = 0; a < sortX.length; a++) {
+        //for( let b = 0; b < sortY.length ; b++){
+        if (!(sortX[a].text === sortY[a].text)) {
+            return false;
+        }
+        // }
+    }
+    return true;
+}
 var AnswerDescriptionPair = (function () {
     /*;
     * @param rawstring Raw-formatted answerDescriptionpair on the form:"synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 = bild1 [bild1.png] bild2 [bild2.png]"
@@ -53,6 +73,7 @@ var AnswerDescriptionPair = (function () {
         this.synonyms = [];
         this.cleared_synonyms = [];
         this.descriptionImagePairs = [];
+        this.userHasCleared = false;
         if (!rawString) {
             return;
         }
@@ -109,6 +130,9 @@ var AnswerDescriptionPair = (function () {
         }
         return -1;
     };
+    AnswerDescriptionPair.prototype.checkMatchBoolean = function (pInput) {
+        return this.checkMatch(pInput) > -1;
+    };
     /*
     *
     * @param pInput input from the user
@@ -135,7 +159,10 @@ var AnswerDescriptionPair = (function () {
      *  - cleared: whether the input was correct or not
      *
      */
-    AnswerDescriptionPair.prototype.checkMatchAndSpliceOnArray = function (pInput) {
+    AnswerDescriptionPair.prototype.checkMatchBooleanArray = function (pInput) {
+        this.cleared_synonyms = [];
+        this.userHasCleared = true;
+        var tempSynonyms = JSON.parse(JSON.stringify(this.synonyms));
         var returnAry = [];
         for (var i = 0; i < pInput.length; i++) {
             if (this.checkMatchAndSplice(pInput[i])) {
@@ -145,18 +172,35 @@ var AnswerDescriptionPair = (function () {
             else {
                 var obj = { cleared: false, text: pInput[i] };
                 returnAry.push(obj);
+                this.userHasCleared = false;
             }
         }
+        this.synonyms = JSON.parse(JSON.stringify(tempSynonyms));
         return returnAry;
     };
     /*
-     * determine wheter user has cleared this AnswerDescriptionPair
+     * Get the synonyms that the user failed on
+     *    ==========================================
+     *    ||Gets reset by checkMatchBooleanArray()||
+     *    ==========================================
      *
-     * @return true if user has cleared, false if not
+     * @return an array of synonyms that the user did not clear
      *
      */
-    AnswerDescriptionPair.prototype.userHasCleared = function () {
-        return this.synonyms.length === 0;
+    AnswerDescriptionPair.prototype.getUnclearedSynonyms = function () {
+        var returnAry = [];
+        for (var a = 0; a < this.synonyms.length; a++) {
+            var foundMatch = false;
+            for (var b = 0; b < this.cleared_synonyms.length; b++) {
+                if (isSynonymEqual(this.synonyms[a], this.cleared_synonyms[b])) {
+                    foundMatch = true;
+                }
+            }
+            if (!foundMatch) {
+                returnAry.push(this.synonyms[a]);
+            }
+        }
+        return returnAry;
     };
     return AnswerDescriptionPair;
 }());
@@ -245,11 +289,12 @@ var QuestionHandler = (function () {
         }
         this.currentQuestionIndex = 0;
         this.currentQuestion = this.questions[0];
+        this.new_Question();
     }
     QuestionHandler.prototype.setQuestions = function (arg) { this.questions = arg; };
     QuestionHandler.prototype.new_Question = function () {
         if (isAnswerDescriptionPair(this.currentQuestion)) {
-            if (this.currentQuestion.userHasCleared()) {
+            if (this.currentQuestion.userHasCleared) {
                 this.clearedQuestions.push(this.questions.splice(this.currentQuestionIndex, 1)[0]);
             }
         }
@@ -262,7 +307,7 @@ var QuestionHandler = (function () {
         //        }
         if (isAnswerDescriptionPair(this.currentQuestion)) {
             if (this.currentQuestion.checkMatchAndSplice(userInput)) {
-                if (this.currentQuestion.userHasCleared()) {
+                if (this.currentQuestion.userHasCleared) {
                 }
                 return "Correct!";
             }
@@ -282,6 +327,7 @@ var QuestionHandler = (function () {
             }
         }
         else if (isMultipleChoice_DescriptionPair(this.currentQuestion)) {
+            //todo: handle MultipleChoice
         }
     };
     return QuestionHandler;
@@ -457,9 +503,57 @@ function focusFirstIncorrectInput() {
 }
 /// <reference path = "client-glos.ts" />
 /// <reference path = "QuestionHandler.ts" />
+/// <reference path = "helper-functions.ts" />
 var globals = {
     questionHandler: null //should be a QuestionHandler
 };
+function init() {
+    initializePage(); // Called only once to layout the page
+    GetJSONFromServer("words/json.txt");
+    nextQuestion();
+}
+function printArray(inputAry) {
+    var currentQuestion = globals.questionHandler.currentQuestion;
+    if (isAnswerDescriptionPair(currentQuestion)) {
+        var answerMarks = [];
+        var result = currentQuestion.checkMatchBooleanArray(inputAry);
+        for (var i = 0; i < result.length; i++) {
+            answerMarks.push(result[i].cleared);
+        }
+        markAnswers(answerMarks);
+        var correctAnswers = [];
+        var synonyms = currentQuestion.getSynonyms();
+        var unclearedSynonyms = currentQuestion.getUnclearedSynonyms();
+        for (var i = 0; i < unclearedSynonyms.length; i++) {
+            // TODO: display only synonyms that the user had wrong
+            var text = unclearedSynonyms[i].alternatives[0].text;
+            correctAnswers.push(text);
+        }
+        setCorrectionString("Fel! Rätt svar var: " + correctAnswers.toString().replace(/,/g, ", "));
+        if (currentQuestion.userHasCleared) {
+            setCorrectionString("Correct!");
+            nextQuestion();
+        }
+        else {
+            focusFirstIncorrectInput();
+        }
+    }
+}
+function nextQuestion() {
+    globals.questionHandler.new_Question();
+    var currentQuestion = globals.questionHandler.currentQuestion;
+    if (isAnswerDescriptionPair(currentQuestion)) {
+        setInputboxes(currentQuestion.getSynonyms().length); // Generating the inputboxes insert the number of inputboxes required
+    }
+    else {
+        // TODO:
+    }
+    setCallback(printArray); // Sets the function to be called when the user submit their response this can be reset at any time
+    // These are called every new question
+    setDescriptions(globals.questionHandler.currentQuestion.descriptionImagePairs); // Sending the array of descriptions for display
+}
+/// <reference path = "QuestionHandler.ts" />
+/// <reference path = "main.ts" />
 function getRandomArbitrary(min, max) {
     return Math.floor(Math.random() * (max - min) + min); // värdet kan aldrig anta MAX då Math.random aldrig kan bli ett därför adderars 1
 }
@@ -480,6 +574,9 @@ function GetJSONFromServer(filename) {
             var isInJsonFormat = true;
             try {
                 var json = JSON.parse(wordfiletext);
+                //if(!json.answerDescriptionPairs){ // check if json is in the correct format
+                //isInJsonFormat = false;
+                //}
             }
             catch (e) {
                 isInJsonFormat = false;
@@ -487,62 +584,16 @@ function GetJSONFromServer(filename) {
             if (isInJsonFormat) {
                 var json = JSON.parse(wordfiletext);
                 globals.questionHandler = new QuestionHandler(json.answerDescriptionPairs);
-                globals.questionHandler.new_Question();
             }
             else {
                 var wordpairs = wordfiletext.split(/\r\n|\r|\n/g); // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
                 globals.questionHandler = createQuestionHandlerFromRawText(wordpairs);
-                globals.questionHandler.new_Question();
             }
         }
     };
     server_file_request.open("GET", filename, false); // Preparing a GET request for the word-list-file
     server_file_request.send(); // Sending the request
     return BothLists;
-}
-function init() {
-    initializePage(); // Called only once to layout the page
-    GetJSONFromServer("words/json.txt");
-    nextQuestion();
-}
-function nextQuestion() {
-    globals.questionHandler.new_Question();
-    var currentQuestion = globals.questionHandler.currentQuestion;
-    // Tutorial begin here!
-    function printArray(inputAry) {
-        var currentQuestion = globals.questionHandler.currentQuestion;
-        if (isAnswerDescriptionPair(currentQuestion)) {
-            var answerMarks = [];
-            var result = currentQuestion.checkMatchAndSpliceOnArray(inputAry);
-            for (var i = 0; i < result.length; i++) {
-                answerMarks.push(result[i].cleared);
-            }
-            markAnswers(answerMarks);
-            var correctAnswers = [];
-            var synonyms = currentQuestion.getSynonyms();
-            for (var i = 0; i < synonyms.length; i++) {
-                correctAnswers.push(synonyms[i].alternatives[0].text);
-            }
-            setCorrectionString("Fel! Rätt svar var: " + correctAnswers.toString().replace(/,/g, ", ")); // Setting the correction string as a demonstration
-            if (currentQuestion.userHasCleared()) {
-                nextQuestion();
-                setCorrectionString("Correct!");
-            }
-            else {
-                setInputboxes(currentQuestion.getSynonyms().length); // Generating the inputboxes insert the number of inputboxes required
-            }
-        }
-        // Do whatever, maybe check if the answers are correct
-    }
-    if (isAnswerDescriptionPair(currentQuestion)) {
-        setInputboxes(currentQuestion.getSynonyms().length); // Generating the inputboxes insert the number of inputboxes required
-    }
-    else {
-    }
-    setCallback(printArray); // Sets the function to be called when the user submit their response this can be reset at any time
-    // These are called every new question
-    setDescriptions(globals.questionHandler.currentQuestion.descriptionImagePairs); // Sending the array of descriptions for display
-    setCorrectionString(""); // Maybe clear the correction on new question Setting a new strinf will however replace the current text
 }
 /**
  * Namespace for dealing with google spreadsheets

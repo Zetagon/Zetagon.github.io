@@ -23,11 +23,12 @@ class QuestionHandler
         }
         this.currentQuestionIndex = 0;
         this.currentQuestion = this.questions[0];
+        this.new_Question();
     }
 
     new_Question(){
         if(isAnswerDescriptionPair(this.currentQuestion)){
-            if(this.currentQuestion.userHasCleared()){
+            if(this.currentQuestion.userHasCleared){
                 this.clearedQuestions.push(this.questions.splice(this.currentQuestionIndex, 1)[0])
             }
         }
@@ -41,7 +42,7 @@ class QuestionHandler
         if( isAnswerDescriptionPair(this.currentQuestion) ){
 
             if(this.currentQuestion.checkMatchAndSplice( userInput )){
-                if( this.currentQuestion.userHasCleared()){
+                if( this.currentQuestion.userHasCleared){
                 }
                 return "Correct!";
             }
