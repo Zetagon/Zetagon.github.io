@@ -12,6 +12,7 @@ class MultipleChoice_DescriptionPair implements questionAnswerPair
 
     private choices:Array<Choice> = [];
         setChoices( arg:Array<Choice> = []){ this.choices = arg};
+    public userClearedFirstTry:boolean;
     
     /*
      * check which of users choices are correct

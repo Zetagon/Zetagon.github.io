@@ -16,7 +16,7 @@ function printArray( inputAry:Array<string> ) {
     let currentQuestion = globals.questionHandler.currentQuestion;
     if(isAnswerDescriptionPair( currentQuestion ) ){
         let answerMarks = [];
-        let result = currentQuestion.checkMatchBooleanArray(inputAry);
+        let result = globals.questionHandler.handleAnswerDescriptionInput(inputAry)//currentQuestion.checkMatchBooleanArray(inputAry);
         for( let i = 0; i < result.length ; i++){
             answerMarks.push(result[i].cleared);
         }
@@ -25,24 +25,31 @@ function printArray( inputAry:Array<string> ) {
         let synonyms = currentQuestion.getSynonyms();
         let unclearedSynonyms = currentQuestion.getUnclearedSynonyms();
         for(let i = 0; i < unclearedSynonyms.length ; i++){
-            // TODO: display only synonyms that the user had wrong
             let text = unclearedSynonyms[i].alternatives[0].text;
             correctAnswers.push( text );
         }
-        setCorrectionString("Fel! Rätt svar var: " + correctAnswers.toString().replace(/,/g, ", "));
 
         if(currentQuestion.userHasCleared){
             setCorrectionString("Correct!");
             nextQuestion();
         }
         else{
+            setCorrectionString("Fel! Rätt svar var: " + correctAnswers.toString().replace(/,/g, ", "));
             focusFirstIncorrectInput()
         }
+    }
+    else if(isMultipleChoice_DescriptionPair( currentQuestion ) ){
+        // TODO: 
+    } else{
+        // TODO: 
     }
 }
 
 function nextQuestion(){
 
+    if(globals.questionHandler.cleared){
+
+    }
     globals.questionHandler.new_Question();
     let currentQuestion = globals.questionHandler.currentQuestion;
 
@@ -50,8 +57,10 @@ function nextQuestion(){
     if (isAnswerDescriptionPair(currentQuestion) ){
         setInputboxes(currentQuestion.getSynonyms().length); // Generating the inputboxes insert the number of inputboxes required
     }
-    else{
+    else if( isMultipleChoice_DescriptionPair( currentQuestion )  ){
         // TODO:
+    } else{
+        // TODO: 
     }
     setCallback(printArray); // Sets the function to be called when the user submit their response this can be reset at any time
 

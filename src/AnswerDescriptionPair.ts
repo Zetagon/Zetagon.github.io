@@ -7,6 +7,7 @@ interface questionAnswerPair
 {
     questionType:string;
     descriptionImagePairs:Array<Description>;
+    userClearedFirstTry:boolean;
 //    checkMatch(pInput:string):number;
 //    checkMatchAndSplice(pInput:string):boolean;
 //    userHasCleared():boolean;
@@ -54,6 +55,7 @@ class AnswerDescriptionPair implements questionAnswerPair
     public descriptionImagePairs:Array<Description>  = [];
         setDescriptionImagePairs(arg:Array<Description>){ this.descriptionImagePairs = arg; }
     public userHasCleared = false;
+    public userClearedFirstTry:boolean = false;
 
     /*;
     * @param rawstring Raw-formatted answerDescriptionpair on the form:"synonym1 | synonymer1 | syno1 & synonym2 | synonymer2 | syno2 = bild1 [bild1.png] bild2 [bild2.png]"
