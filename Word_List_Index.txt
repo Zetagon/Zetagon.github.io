@@ -5,3 +5,4 @@ Genetik=genetik.txt
 Ekonomi-begrepp=ekonomi.txt
 Ämnesklasser=amnesklasser.txt
 SAT Words 1-3=SAT1-3.txt
+SAT Words 1-3 missing word=SAT1-3_sentences.txt
