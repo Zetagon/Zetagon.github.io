@@ -1,5 +1,5 @@
 Latin Prefixes=Latin Prefixes.txt
-English Must Words@approved=English_6_Must_Words.txt
+English Must Words=English_6_Must_Words.txt
 Rethorical Devices=Rethorical_Devices.txt
 Genetik=genetik.txt
 Ekonomi-begrepp=ekonomi.txt
