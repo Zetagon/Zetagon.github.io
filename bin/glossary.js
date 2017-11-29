@@ -107,10 +107,11 @@ function GetWordListFromServer(filename) {
         if (server_file_request.readyState == 4 && server_file_request.status == 200) {
             var wordfiletext = server_file_request.responseText;
             var wordpairs = wordfiletext.split(/\r\n|\r|\n/g);
+            wordpairs = wordpairs.filter(function(entry) { return entry.trim() != ''; });
             for (var i = 0; i < wordpairs.length; i++) {
                 var wordpair = wordpairs[i].split("=");
-                ListLeft[i] = wordpair[0];
-                ListRight[i] = wordpair[1];
+                ListLeft[i] = wordpair[0].trim();
+                ListRight[i] = wordpair[1].trim();
             }
             BothLists = [ListLeft, ListRight];
         }
