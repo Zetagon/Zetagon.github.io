@@ -158,10 +158,8 @@ server_file_request.onreadystatechange = function()  // This function will run w
     if (server_file_request.readyState==4 && server_file_request.status==200)  // When this is the case the response is ready to collect
 	{
 		var wordfiletext = server_file_request.responseText;  // The file is saved to a variable in order to not rely on the XMLHttpRequest anymore
-		var wordpairs:Array<string> = wordfiletext.split(/\r\n|\r|\n/g);  // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
-		wordpairs = wordpairs.filter(function(str) {
-		    return /\S/.test(str);
-		});
+		var wordpairs = wordfiletext.split(/\r\n|\r|\n/g);  // Splitting the text by newlines. Many different versions of newline are used to make sure all browsers understand
+		wordpairs = wordpairs.filter(function(entry) { return entry.trim() != ''; });
 		for (let i = 0; i < wordpairs.length; i++)  // Splitting the wordpairs into induvidual words and saving them to a left and right word-list
 		{
 			var wordpair = wordpairs[i].split("=");
